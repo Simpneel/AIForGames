@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     asciiMap.push_back("000000000000");
 
     NodeMap newMap;
-	newMap.Initialise(asciiMap, 10);
+	newMap.Initialise(asciiMap, 50);
     
 
     // Main game loop

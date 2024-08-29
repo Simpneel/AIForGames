@@ -19,16 +19,17 @@ namespace AIForGames
 
         glm::vec2 position;
         std::vector<Edge> connections;
-    public:
-        //Node() {}
+        float gScore;
+        Node* previous;
+
+        Node() {}
         Node(float x, float y) { position.x = x; position.y = y; }
 
         void SetPosition(float x, float y) { position.x = x; position.y = y; }
 
-        void ConnectTo(Node* other, float cost)
-        {
-            connections.push_back(Edge(other, cost));
-        }
+        void ConnectTo(Node* other, float cost) { connections.push_back(Edge(other, cost)); }
+
+        bool operator==(Node& rhs) const;
     };
 }
 
@@ -44,4 +45,6 @@ public:
     AIForGames::Node* GetNode(int x, int y) const { return m_nodes[x + m_width * y]; }
 
     void Draw();
+
+    static std::vector<AIForGames::Node*> DijkstrasSearch(AIForGames::Node* startNode, AIForGames::Node* endNote);
 };

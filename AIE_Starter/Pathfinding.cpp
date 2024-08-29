@@ -1,9 +1,17 @@
 #include "Pathfinding.h"
 
+#include <algorithm>
 #include <iostream>
+#include <ppltasks.h>
 #include <raylib.h>
 
 using namespace AIForGames;
+
+bool Node::operator==(Node& rhs) const
+{
+	if (position == rhs.position && gScore == rhs.gScore) return true;
+	return false;
+}
 
 void NodeMap::Initialise(std::vector<std::string> asciiMap, int cellSize)
 {
@@ -81,9 +89,65 @@ void NodeMap::Draw()
 				for (int i = 0; i < node->connections.size(); i++)
 				{
 					Node* other = node->connections[i].target;
-					DrawLine((x + 0.5f) * m_cellSize, (y + 0.5f) * m_cellSize, (int)other->position.x, (int)other->position.y, PURPLE);
+					DrawLine((x + 0.5f) * m_cellSize, (y + 0.5f) * m_cellSize, (int)other->position.x, (int)other->position.y, GOLD);
 				}
 			}
 		}
 	}
+}
+
+std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startNode, AIForGames::Node* endNode)
+{
+	if (startNode == nullptr || endNode == nullptr)
+	{
+		std::cout << "Error! Either the start node or end node for Dijkstra's Search is NULL! Line 95 Pathfinding.cpp\n";
+	}
+	if (startNode == endNode) return {};
+
+	startNode->gScore = 0;
+	startNode->previous = nullptr;
+
+	std::vector<Node*> openList;
+	std::vector<Node*> closedList;
+
+	openList.insert(openList.begin(), startNode);
+	while(openList.empty() == false)
+	{
+		std::sort(openList.begin(), openList.end(), openList[0]->gScore);
+		Node* currentNode = openList.front();
+
+		if (currentNode == endNode) { break; }
+
+		openList.erase(std::remove(openList.begin(), openList.end(), currentNode), openList.end());
+		closedList.push_back(currentNode);
+
+		for(std::vector<Edge>::iterator c = currentNode->connections.begin(); c!= currentNode->connections.end(); ++c)
+		{
+			std::vector<Node*>::iterator it = std::find(closedList.begin(), closedList.end(), c);
+			if (it != closedList.end())
+			{
+				float gScore = currentNode->gScore + c->cost;
+				if ((std::find(openList.begin(), openList.end(), *c))!= openList.end())
+				{
+					c->target->gScore = gScore;
+					c->target->previous = currentNode;
+					openList.push_back(c->target);
+				}
+				else if (gScore < c->target->gScore)
+				{
+					c->target->gScore = gScore;
+					c->target->previous = currentNode;
+				}
+			}
+		}
+	}
+	std::vector<Node*> Path;
+	Node* currentNode = endNode;
+	while (currentNode != nullptr)
+	{
+		Path.insert(Path.begin(), currentNode);
+		currentNode = currentNode->previous;
+	}
+
+	return Path;
 }
