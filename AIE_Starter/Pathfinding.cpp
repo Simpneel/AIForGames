@@ -7,12 +7,6 @@
 
 using namespace AIForGames;
 
-bool Node::operator==(Node& rhs) const
-{
-	if (position == rhs.position && gScore == rhs.gScore) return true;
-	return false;
-}
-
 void NodeMap::Initialise(std::vector<std::string> asciiMap, int cellSize)
 {
 	m_cellSize = cellSize;
@@ -96,6 +90,8 @@ void NodeMap::Draw()
 	}
 }
 
+bool compareGScore(const Node* n1, const Node* n2) { return n1->gScore < n2->gScore; }
+
 std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startNode, AIForGames::Node* endNode)
 {
 	if (startNode == nullptr || endNode == nullptr)
@@ -113,7 +109,7 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 	openList.insert(openList.begin(), startNode);
 	while(openList.empty() == false)
 	{
-		std::sort(openList.begin(), openList.end(), openList[0]->gScore);
+		std::sort(openList.begin(), openList.end(), compareGScore);
 		Node* currentNode = openList.front();
 
 		if (currentNode == endNode) { break; }
@@ -121,13 +117,13 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 		openList.erase(std::remove(openList.begin(), openList.end(), currentNode), openList.end());
 		closedList.push_back(currentNode);
 
-		for(std::vector<Edge>::iterator c = currentNode->connections.begin(); c!= currentNode->connections.end(); ++c)
+		/*for(std::vector<Edge>::iterator c = currentNode->connections.begin(); c!= currentNode->connections.end(); ++c)
 		{
-			std::vector<Node*>::iterator it = std::find(closedList.begin(), closedList.end(), c);
+			std::vector<Node*>::iterator it = std::find(closedList.begin(), closedList.end(), c->target);
 			if (it != closedList.end())
 			{
 				float gScore = currentNode->gScore + c->cost;
-				if ((std::find(openList.begin(), openList.end(), *c))!= openList.end())
+				if ((std::find(openList.begin(), openList.end(), c))!= openList.end())
 				{
 					c->target->gScore = gScore;
 					c->target->previous = currentNode;
@@ -137,6 +133,26 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 				{
 					c->target->gScore = gScore;
 					c->target->previous = currentNode;
+				}
+				
+			}
+		}*/
+		for (int c = 0; c < currentNode->connections.size(); c++)
+		{
+			if (std::find(closedList.begin(), closedList.end(), currentNode->connections.at(c).target ) != closedList.end())
+			{
+				float gScore = currentNode->gScore + currentNode->connections.at(c).cost;
+
+				if (std::find(openList.begin(), openList.end(), currentNode->connections.at(c).target) != openList.end())
+				{
+					currentNode->connections.at(c).target->gScore = gScore;
+					currentNode->connections.at(c).target->previous = currentNode;
+					openList.push_back(currentNode->connections.at(c).target);
+				}
+				else if (gScore < currentNode->connections.at(c).target->gScore)
+				{
+					currentNode->connections.at(c).target->gScore = gScore;
+					currentNode->connections.at(c).target->previous = currentNode;
 				}
 			}
 		}

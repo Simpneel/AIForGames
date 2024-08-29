@@ -28,8 +28,6 @@ namespace AIForGames
         void SetPosition(float x, float y) { position.x = x; position.y = y; }
 
         void ConnectTo(Node* other, float cost) { connections.push_back(Edge(other, cost)); }
-
-        bool operator==(Node& rhs) const;
     };
 }
 
