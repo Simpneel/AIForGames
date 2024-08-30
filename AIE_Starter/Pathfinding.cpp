@@ -100,29 +100,13 @@ void NodeMap::Draw()
 
 void NodeMap::DrawPath(std::vector<AIForGames::Node*> nodeMapPath, Color lineColor)
 {
-	//for (int i = 1; i < nodeMapPath.size(); ++i)
-	//{
-	//	int tempXPos = nodeMapPath.at(i)->position.x;
-	//	int tempYPos = nodeMapPath.at(i)->position.y;
-	//	if (i + 1 < nodeMapPath.size())
-	//	{
-	//		Node* other = nodeMapPath.at(i + 1);//->connections[i].target;
-	//		DrawLine((tempXPos + 0.5f) * m_cellSize, (tempYPos + 0.5f) * m_cellSize, other->position.x, other->position.y, lineColor);
-	//	}
-	//	else
-	//	{
-	//		DrawLine((tempXPos + 0.5f) * m_cellSize, (tempYPos + 0.5f) * m_cellSize, );
-	//	}
-	//}
+
 	for (int i = 1; i < nodeMapPath.size(); ++i)
 	{
-		Node* thisNode = nodeMapPath.at(i);
-		for (int j = 0; j < thisNode->connections.size(); ++j)
-		{
-			Node* targetNode = thisNode->connections[j].target;
-			DrawLine((thisNode->position.x + 0.5f) * m_cellSize, (thisNode->position.y + 0.5f) * m_cellSize,
-				targetNode->position.x, targetNode->position.y, lineColor);
-		}
+		Node* prevNode = nodeMapPath.at(i - 1);	//placeholder variable to store the previous node aka the start of the path
+		Node* curNode = nodeMapPath.at(i);	//placeholder variable to store the current node in the path
+		//Drawing from last node to current node
+		DrawLine(prevNode->position.x, prevNode->position.y, curNode->position.x, curNode->position.y, lineColor);
 	}
 }
 
@@ -134,7 +118,7 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 	{
 		std::cout << "Error! Either the start node or end node for Dijkstra's Search is NULL! Line 95 Pathfinding.cpp\n";
 	}
-	if (startNode == endNode) return {0,0};
+	if (startNode == endNode) return {};
 
 	startNode->gScore = 0;
 	startNode->previous = nullptr;
@@ -148,43 +132,26 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 		std::sort(openList.begin(), openList.end(), compareGScore);
 		Node* currentNode = openList.front();
 
-		if (currentNode == endNode) { break; }
+		if (currentNode == endNode)
+		{
+			break;
+		}
 
-		openList.erase(std::remove(openList.begin(), openList.end(), currentNode), openList.end());
+		openList.erase(std::remove(openList.begin(), openList.end(), currentNode), openList.end());  
 		closedList.push_back(currentNode);
 
-		/*for(std::vector<Edge>::iterator c = currentNode->connections.begin(); c!= currentNode->connections.end(); ++c)
-		{
-			std::vector<Node*>::iterator it = std::find(closedList.begin(), closedList.end(), c->target);
-			if (it != closedList.end())
-			{
-				float gScore = currentNode->gScore + c->cost;
-				if ((std::find(openList.begin(), openList.end(), c))!= openList.end())
-				{
-					c->target->gScore = gScore;
-					c->target->previous = currentNode;
-					openList.push_back(c->target);
-				}
-				else if (gScore < c->target->gScore)
-				{
-					c->target->gScore = gScore;
-					c->target->previous = currentNode;
-				}
-				
-			}
-		}*/
 		for (int c = 0; c < currentNode->connections.size(); c++)
 		{
 			Node* tempNode = currentNode->connections.at(c).target;
-			if (std::find(closedList.begin(), closedList.end(), tempNode ) != closedList.end())
+			if (std::find(closedList.begin(), closedList.end(), tempNode ) == closedList.end())//checking that the currentNode doesn't exist in closedList 
 			{
 				float gScore = currentNode->gScore + currentNode->connections.at(c).cost;
 
-				if (std::find(openList.begin(), openList.end(), tempNode) != openList.end())
+				if (std::find(openList.begin(), openList.end(), tempNode) == openList.end())//checking that the tempNode doesn't exist in openList
 				{
 					tempNode->gScore = gScore;
 					tempNode->previous = currentNode;
-					openList.push_back(currentNode->connections.at(c).target);
+					openList.push_back(tempNode);
 				}
 				else if (gScore < tempNode->gScore)
 				{
@@ -194,17 +161,63 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 			}
 		}
 	}
-	std::vector<Node*> Path;
+
+	std::vector<Node*> Path;	//return variable that will store the path found by the algorithm in reverse order 
 	Node* currentNode = endNode;
 	while (currentNode != nullptr)
 	{
 		Path.insert(Path.begin(), currentNode);
-		/*if (currentNode->previous != nullptr)
-		{
-			currentNode = currentNode->previous;
-		}*/
 		currentNode = currentNode->previous;
 	}
 
 	return Path;
+}
+
+void PathAgent::Update(float deltaTime)
+{
+	if (m_path.empty()) return;
+	float dist = distance(m_path.at(m_currentIndex + 1)->position, m_currentNode->position);
+	dist = dist - (m_speed * deltaTime);
+	glm::vec2 unitVec = glm::normalize(m_position);
+	if (dist > 0)
+	{
+		m_position.x = m_position.x + (m_speed * deltaTime * unitVec.x);
+		m_position.y = m_position.y + (m_speed * deltaTime * unitVec.y);
+	}
+	else
+	{
+		m_currentIndex++;
+		if (false)
+		{
+			GoToNode(m_path.back());
+			m_path.clear();
+		}
+		else
+		{
+			dist = -dist;
+
+		}
+	}
+}
+
+void PathAgent::GoToNode(AIForGames::Node* node)
+{
+	m_path = NodeMap::DijkstrasSearch(m_currentNode, node);
+	m_currentIndex = 0;
+}
+
+void PathAgent::SetNode(AIForGames::Node* node)
+{
+	m_currentNode = node;
+	m_position = node->position;
+}
+
+void PathAgent::SetSpeed(float speed)
+{
+	m_speed = speed;
+}
+
+void PathAgent::Draw()
+{
+	DrawCircle(m_position.x, m_position.y, 8, GOLD);
 }

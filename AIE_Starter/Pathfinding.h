@@ -23,8 +23,8 @@ namespace AIForGames
         float gScore;
         Node* previous;
 
-        Node() {}
-        Node(float x, float y) { position.x = x; position.y = y; }
+        Node() { gScore = 0; previous = nullptr; }
+        Node(float x, float y) { position.x = x; position.y = y; gScore = 0; previous = nullptr; }
 
         void SetPosition(float x, float y) { position.x = x; position.y = y; }
 
@@ -48,4 +48,21 @@ public:
     void DrawPath(std::vector<AIForGames::Node*> nodeMapPath, Color lineColor);
 
     static std::vector<AIForGames::Node*> DijkstrasSearch(AIForGames::Node* startNode, AIForGames::Node* endNode);
+};
+
+class PathAgent
+{
+public:
+    glm::vec2 m_position;
+
+    std::vector<AIForGames::Node*> m_path;
+    int m_currentIndex;
+    AIForGames::Node* m_currentNode;
+    float m_speed;
+
+    void Update(float deltaTime);
+    void GoToNode(AIForGames::Node* node);
+    void SetNode(AIForGames::Node* node);
+    void SetSpeed(float speed);
+	void Draw();
 };
