@@ -70,11 +70,7 @@ AIForGames::Node* NodeMap::GetClosestNode(glm::vec2 worldPos)
 
 void NodeMap::Draw()
 {
-	Color cellColor;
-	cellColor.a = 255;
-	cellColor.r = 255;
-	cellColor.g = 0;
-	cellColor.b = 0;
+	
 
 	for (int y = 0; y < m_height; y++)
 	{
@@ -84,21 +80,21 @@ void NodeMap::Draw()
 			if (node == nullptr)
 			{
 				DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
-					(int)m_cellSize - 1, (int)m_cellSize - 1, cellColor);
+					(int)m_cellSize - 1, (int)m_cellSize - 1, BLACK);
 			}
 			else
 			{
 				for (int i = 0; i < node->connections.size(); i++)
 				{
 					Node* other = node->connections[i].target;
-					DrawLine((x + 0.5f) * m_cellSize, (y + 0.5f) * m_cellSize, (int)other->position.x, (int)other->position.y, LIGHTGRAY);
+					DrawLine((x + 0.5f) * m_cellSize, (y + 0.5f) * m_cellSize, (int)other->position.x, (int)other->position.y, GRAY);
 				}
 			}
 		}
 	}
 }
 
-void NodeMap::DrawPath(std::vector<AIForGames::Node*> nodeMapPath, Color lineColor)
+void NodeMap::DrawPath(std::vector<AIForGames::Node*> nodeMapPath, Color lineColor, float lineThickness)
 {
 
 	for (int i = 1; i < nodeMapPath.size(); ++i)
@@ -106,7 +102,8 @@ void NodeMap::DrawPath(std::vector<AIForGames::Node*> nodeMapPath, Color lineCol
 		Node* prevNode = nodeMapPath.at(i - 1);	//placeholder variable to store the previous node aka the start of the path
 		Node* curNode = nodeMapPath.at(i);	//placeholder variable to store the current node in the path
 		//Drawing from last node to current node
-		DrawLine(prevNode->position.x, prevNode->position.y, curNode->position.x, curNode->position.y, lineColor);
+		//DrawLine(prevNode->position.x, prevNode->position.y, curNode->position.x, curNode->position.y, lineColor);
+		DrawLineEx(Vector2{ prevNode->position.x, prevNode->position.y }, Vector2{ curNode->position.x, curNode->position.y }, lineThickness, lineColor);
 	}
 }
 
@@ -187,7 +184,7 @@ void PathAgent::Update(float deltaTime)
 	else
 	{
 		m_currentIndex++;
-		if (false)
+		if (m_currentNode == m_path.back())
 		{
 			GoToNode(m_path.back());
 			m_path.clear();
@@ -195,7 +192,8 @@ void PathAgent::Update(float deltaTime)
 		else
 		{
 			dist = -dist;
-
+			
+			
 		}
 	}
 }
@@ -219,5 +217,5 @@ void PathAgent::SetSpeed(float speed)
 
 void PathAgent::Draw()
 {
-	DrawCircle(m_position.x, m_position.y, 8, GOLD);
+	DrawCircle(m_position.x, m_position.y, 8, ORANGE);
 }

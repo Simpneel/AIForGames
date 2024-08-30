@@ -101,10 +101,10 @@ int main(int argc, char* argv[])
         ClearBackground(DARKGRAY);
 
         nodeMap.Draw();
-        nodeMap.DrawPath(nodeMapPath, Color{ 0, 255, 255, 160 });
-        nodeMap.DrawPath(newAgent.m_path, GREEN);
+        nodeMap.DrawPath(nodeMapPath, DARKPURPLE, 4);
+        nodeMap.DrawPath(newAgent.m_path, ORANGE, 3);
 
-        newAgent.Update(deltaTime);
+        //newAgent.Update(deltaTime);
         newAgent.Draw();
 
         EndDrawing();
