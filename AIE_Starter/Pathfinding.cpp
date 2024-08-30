@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <iostream>
 #include <ppltasks.h>
-#include <raylib.h>
 
 using namespace AIForGames;
 
@@ -60,6 +59,15 @@ void NodeMap::Initialise(std::vector<std::string> asciiMap, int cellSize)
 	}
 }
 
+AIForGames::Node* NodeMap::GetClosestNode(glm::vec2 worldPos)
+{
+	int i = static_cast<int>(worldPos.x / m_cellSize);
+	if (i < 0 || i >= m_width) return nullptr;
+	int j = static_cast<int>(worldPos.y / m_cellSize);
+	if (j < 0 || j >= m_height) return nullptr;
+	return GetNode(i, j);
+}
+
 void NodeMap::Draw()
 {
 	Color cellColor;
@@ -83,9 +91,37 @@ void NodeMap::Draw()
 				for (int i = 0; i < node->connections.size(); i++)
 				{
 					Node* other = node->connections[i].target;
-					DrawLine((x + 0.5f) * m_cellSize, (y + 0.5f) * m_cellSize, (int)other->position.x, (int)other->position.y, GOLD);
+					DrawLine((x + 0.5f) * m_cellSize, (y + 0.5f) * m_cellSize, (int)other->position.x, (int)other->position.y, LIGHTGRAY);
 				}
 			}
+		}
+	}
+}
+
+void NodeMap::DrawPath(std::vector<AIForGames::Node*> nodeMapPath, Color lineColor)
+{
+	//for (int i = 1; i < nodeMapPath.size(); ++i)
+	//{
+	//	int tempXPos = nodeMapPath.at(i)->position.x;
+	//	int tempYPos = nodeMapPath.at(i)->position.y;
+	//	if (i + 1 < nodeMapPath.size())
+	//	{
+	//		Node* other = nodeMapPath.at(i + 1);//->connections[i].target;
+	//		DrawLine((tempXPos + 0.5f) * m_cellSize, (tempYPos + 0.5f) * m_cellSize, other->position.x, other->position.y, lineColor);
+	//	}
+	//	else
+	//	{
+	//		DrawLine((tempXPos + 0.5f) * m_cellSize, (tempYPos + 0.5f) * m_cellSize, );
+	//	}
+	//}
+	for (int i = 1; i < nodeMapPath.size(); ++i)
+	{
+		Node* thisNode = nodeMapPath.at(i);
+		for (int j = 0; j < thisNode->connections.size(); ++j)
+		{
+			Node* targetNode = thisNode->connections[j].target;
+			DrawLine((thisNode->position.x + 0.5f) * m_cellSize, (thisNode->position.y + 0.5f) * m_cellSize,
+				targetNode->position.x, targetNode->position.y, lineColor);
 		}
 	}
 }
@@ -98,7 +134,7 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 	{
 		std::cout << "Error! Either the start node or end node for Dijkstra's Search is NULL! Line 95 Pathfinding.cpp\n";
 	}
-	if (startNode == endNode) return {};
+	if (startNode == endNode) return {0,0};
 
 	startNode->gScore = 0;
 	startNode->previous = nullptr;
@@ -139,20 +175,21 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 		}*/
 		for (int c = 0; c < currentNode->connections.size(); c++)
 		{
-			if (std::find(closedList.begin(), closedList.end(), currentNode->connections.at(c).target ) != closedList.end())
+			Node* tempNode = currentNode->connections.at(c).target;
+			if (std::find(closedList.begin(), closedList.end(), tempNode ) != closedList.end())
 			{
 				float gScore = currentNode->gScore + currentNode->connections.at(c).cost;
 
-				if (std::find(openList.begin(), openList.end(), currentNode->connections.at(c).target) != openList.end())
+				if (std::find(openList.begin(), openList.end(), tempNode) != openList.end())
 				{
-					currentNode->connections.at(c).target->gScore = gScore;
-					currentNode->connections.at(c).target->previous = currentNode;
+					tempNode->gScore = gScore;
+					tempNode->previous = currentNode;
 					openList.push_back(currentNode->connections.at(c).target);
 				}
-				else if (gScore < currentNode->connections.at(c).target->gScore)
+				else if (gScore < tempNode->gScore)
 				{
-					currentNode->connections.at(c).target->gScore = gScore;
-					currentNode->connections.at(c).target->previous = currentNode;
+					tempNode->gScore = gScore;
+					tempNode->previous = currentNode;
 				}
 			}
 		}
@@ -162,6 +199,10 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 	while (currentNode != nullptr)
 	{
 		Path.insert(Path.begin(), currentNode);
+		/*if (currentNode->previous != nullptr)
+		{
+			currentNode = currentNode->previous;
+		}*/
 		currentNode = currentNode->previous;
 	}
 

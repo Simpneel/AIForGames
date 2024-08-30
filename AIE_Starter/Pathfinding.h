@@ -1,5 +1,6 @@
 #pragma once
 
+#include <raylib.h>
 #include <string>
 #include <glm/glm.hpp>
 #include <vector>
@@ -33,16 +34,18 @@ namespace AIForGames
 
 class NodeMap
 {
+public:
     int m_width, m_height;
     float m_cellSize;
 
     AIForGames::Node** m_nodes;
-public:
     void Initialise(std::vector<std::string> asciiMap, int cellSize);
 
     AIForGames::Node* GetNode(int x, int y) const { return m_nodes[x + m_width * y]; }
+    AIForGames::Node* GetClosestNode(glm::vec2 worldPos);
 
     void Draw();
+    void DrawPath(std::vector<AIForGames::Node*> nodeMapPath, Color lineColor);
 
-    static std::vector<AIForGames::Node*> DijkstrasSearch(AIForGames::Node* startNode, AIForGames::Node* endNote);
+    static std::vector<AIForGames::Node*> DijkstrasSearch(AIForGames::Node* startNode, AIForGames::Node* endNode);
 };
