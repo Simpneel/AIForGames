@@ -173,9 +173,9 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 void PathAgent::Update(float deltaTime)
 {
 	if (m_path.empty()) return;
-	float dist = distance(m_path.at(m_currentIndex + 1)->position, m_currentNode->position);
+	/*float dist = distance(m_path.at(m_currentIndex+1)->position, m_currentNode->position);
 	dist = dist - (m_speed * deltaTime);
-	glm::vec2 unitVec = glm::normalize(m_position);
+	glm::vec2 unitVec = glm::normalize(m_path.at(m_currentIndex)->position);
 	if (dist > 0)
 	{
 		m_position.x = m_position.x + (m_speed * deltaTime * unitVec.x);
@@ -192,10 +192,11 @@ void PathAgent::Update(float deltaTime)
 		else
 		{
 			dist = -dist;
-			
-			
+			unitVec = glm::normalize(m_currentNode->previous->position + m_path.at(m_currentIndex)->position);
+			m_position.x = m_position.x + (((m_speed * deltaTime)-dist) * unitVec.x);
+			m_position.y = m_position.y + (((m_speed * deltaTime)-dist) * unitVec.y);
 		}
-	}
+	}*/
 }
 
 void PathAgent::GoToNode(AIForGames::Node* node)

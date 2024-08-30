@@ -70,13 +70,13 @@ int main(int argc, char* argv[])
 
     nodeMap.Initialise(asciiMap, 32);
 
-    Node* start = nodeMap.GetNode(10, 1);
-    Node* end = nodeMap.GetNode(1, 1);
+    Node* start = nodeMap.GetNode(1, 1);
+    Node* end = nodeMap.GetNode(10, 1);
     std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
     
     PathAgent newAgent;
     newAgent.SetNode(start);
-    newAgent.SetSpeed(16);
+    newAgent.SetSpeed(64);
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
         nodeMap.DrawPath(nodeMapPath, DARKPURPLE, 4);
         nodeMap.DrawPath(newAgent.m_path, ORANGE, 3);
 
-        //newAgent.Update(deltaTime);
+        newAgent.Update(deltaTime);
         newAgent.Draw();
 
         EndDrawing();
