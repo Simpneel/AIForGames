@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <iostream>
-#include <ppltasks.h>
 
 using namespace AIForGames;
 

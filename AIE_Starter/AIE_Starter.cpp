@@ -1,5 +1,3 @@
-
-
 #include "raylib.h"
 
 //#define RAYGUI_IMPLEMENTATION
@@ -15,7 +13,7 @@ int main(int argc, char* argv[])
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    int screenWidth = 640;
+    int screenWidth = 800;
     int screenHeight = 640;
 
     InitWindow(screenWidth, screenHeight, "AI For Games: Pathfinding");
@@ -82,6 +80,7 @@ int main(int argc, char* argv[])
 
     //TileMap initialization
     TileMap *newMap = new TileMap();
+    bool isEditorOpen = false;
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -113,6 +112,22 @@ int main(int argc, char* argv[])
         newAgent.Update(deltaTime);
         newAgent.Draw();*/
         newMap->DrawMap();
+
+        if (IsKeyPressed(KEY_E))   //added editor mode, can be turned on and off by pressing 'E'
+        {
+            if (isEditorOpen) isEditorOpen = false;
+            else isEditorOpen = true;
+        }
+        newMap->ChangeTextureAtMouseLoc(GetMousePosition(), isEditorOpen);
+        
+        if (IsKeyPressed(KEY_S))
+        {
+            newMap->SaveMapToFile();
+        }
+        if (IsKeyPressed(KEY_L))
+        {
+            newMap->LoadMapFromFile("tileMapSaved.txt");
+        }
 
         EndDrawing();
         
