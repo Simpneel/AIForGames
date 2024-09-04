@@ -126,7 +126,7 @@ void TileMap::LoadMapFromFile(const char* fileName)
 	for (int i = 0; i < 20; ++i)
 	{
 		mapSaveFile.getline(*loadedMap[i], 40, ',');
-	}h
+	} 
 	for (int i = 0; i < 20; ++i)
 	{
 		for (int j = 0; j < 20; ++j)
