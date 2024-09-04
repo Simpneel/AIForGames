@@ -17,6 +17,7 @@ private:
 	Rectangle src, dest;
 	Texture2D grassTexture;
 	Texture2D waterTexture;
+	Texture2D brickTexture;
 
 	int map[20][20];
 
