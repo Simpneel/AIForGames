@@ -121,20 +121,34 @@ void TileMap::SaveMapToFile()
 
 void TileMap::LoadMapFromFile(const char* fileName)
 {
-	std::fstream mapSaveFile(fileName, std::ios::in);
-	char* loadedMap[20][40];
-	for (int i = 0; i < 20; ++i)
+	//std::fstream mapSaveFile(fileName, std::ios::in);
+	//char* loadedMap[20][40];
+	//for (int i = 0; i < 20; ++i)
+	//{
+	//	mapSaveFile.getline(*loadedMap[i], 40, ',');
+	//}
+	//for (int i = 0; i < 20; ++i)
+	//{
+	//	for (int j = 0; j < 20; ++j)
+	//	{
+	//		//move characters from loadedMap[][] to map[][]
+	//	}
+	//}
+	//LoadMap(map);
+	std::fstream file;
+	char temp[20][21];  // Allocate memory for 20 strings of up to 20 characters each (+1 for null terminator)
+
+	file.open("tileMapSaved.txt", std::ios::in);
+	if (file.is_open())
 	{
-		mapSaveFile.getline(*loadedMap[i], 40, ',');
-	}h
-	for (int i = 0; i < 20; ++i)
-	{
-		for (int j = 0; j < 20; ++j)
+		for (int i = 0; i < 20; ++i)
 		{
-			//move characters from loadedMap[][] to map[][]
+			file.getline(temp[i], 41);  // 21 to account for the null terminator
+			std::cout << temp[i] << std::endl;
+			break;
 		}
 	}
-	//LoadMap(map);
+	file.close();
 }
 
 void TileMap::DrawMap()
