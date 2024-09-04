@@ -7,14 +7,16 @@
 #include "raygui.h"
 #include "Pathfinding.h"
 
+#include "TileMap.h"
+
 using namespace AIForGames;
 
 int main(int argc, char* argv[])
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    int screenWidth = 1200;
-    int screenHeight = 700;
+    int screenWidth = 640;
+    int screenHeight = 640;
 
     InitWindow(screenWidth, screenHeight, "AI For Games: Pathfinding");
 
@@ -36,47 +38,51 @@ int main(int argc, char* argv[])
     NodeMap newMap;
 	newMap.Initialise(asciiMap1, 50);*/
 
-    NodeMap nodeMap;
-    std::vector<std::string> asciiMap;
-   /* asciiMap.push_back("000000000000");
-    asciiMap.push_back("010111011100");
-    asciiMap.push_back("010101110110");
-    asciiMap.push_back("010100000000");
-    asciiMap.push_back("010111111110");
-    asciiMap.push_back("010000001000");
-    asciiMap.push_back("011111111110");
-    asciiMap.push_back("000000000000");*/
+   // NodeMap nodeMap;
+   // std::vector<std::string> asciiMap;
+   ///* asciiMap.push_back("000000000000");
+   // asciiMap.push_back("010111011100");
+   // asciiMap.push_back("010101110110");
+   // asciiMap.push_back("010100000000");
+   // asciiMap.push_back("010111111110");
+   // asciiMap.push_back("010000001000");
+   // asciiMap.push_back("011111111110");
+   // asciiMap.push_back("000000000000");*/
 
-    asciiMap.push_back("00000000000000000000");
-    asciiMap.push_back("01111111111111111110");
-    asciiMap.push_back("00000111110000001110");
-    asciiMap.push_back("01101010101010101010");
-    asciiMap.push_back("01111111111111111110");
-    asciiMap.push_back("01000000011100001100");
-    asciiMap.push_back("00000000000110000000");
-    asciiMap.push_back("00011111100111110010");
-    asciiMap.push_back("01111000000000011110");
-    asciiMap.push_back("00010111111111110000");
-    asciiMap.push_back("01110001111000000000");
-    asciiMap.push_back("01000000010000000000");
-    asciiMap.push_back("01111000111100011100");
-    asciiMap.push_back("01110000001000111000");
-    asciiMap.push_back("01110000001111100000");
-    asciiMap.push_back("01000000000000100000");
-    asciiMap.push_back("01000000000001111000");
-    asciiMap.push_back("01111111111111100000");
-    asciiMap.push_back("00000000011111100000");
-    asciiMap.push_back("00000000000000000000");
+   // asciiMap.push_back("00000000000000000000");
+   // asciiMap.push_back("01111111111111111110");
+   // asciiMap.push_back("00000111110000001110");
+   // asciiMap.push_back("01101010101010101010");
+   // asciiMap.push_back("01111111111111111110");
+   // asciiMap.push_back("01001000011100001100");
+   // asciiMap.push_back("00001000000110000000");
+   // asciiMap.push_back("00011111100111110010");
+   // asciiMap.push_back("01111100000000011110");
+   // asciiMap.push_back("00010111111111110010");
+   // asciiMap.push_back("01110001111000000010");
+   // asciiMap.push_back("01000000010000000010");
+   // asciiMap.push_back("01111000111100011110");
+   // asciiMap.push_back("01110000001000111010");
+   // asciiMap.push_back("01110000001111100010");
+   // asciiMap.push_back("01000000000000100010");
+   // asciiMap.push_back("01000000000001111110");
+   // asciiMap.push_back("01111111111111100000");
+   // asciiMap.push_back("00000000011111100000");
+   // asciiMap.push_back("00000000000000000000");
 
-    nodeMap.Initialise(asciiMap, 32);
+   // //nodeMap.Initialise(asciiMap, 32);
 
-    Node* start = nodeMap.GetNode(1, 1);
-    Node* end = nodeMap.GetNode(10, 1);
-    std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
-    
-    PathAgent newAgent;
-    newAgent.SetNode(start);
-    newAgent.SetSpeed(64);
+   // Node* start = nodeMap.GetNode(1, 1);
+   // Node* end = nodeMap.GetNode(10, 1);
+   // std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
+   // 
+   // PathAgent newAgent;
+   // newAgent.SetNode(start);
+   // newAgent.SetSpeed(64);
+
+    //TileMap initialization
+    TileMap *newMap = new TileMap();
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
@@ -88,24 +94,25 @@ int main(int argc, char* argv[])
         time = fTime;
         
         //----------------------------------------------------------------------------------
-        if (IsMouseButtonPressed(0))
-        {
-            start = nodeMap.GetClosestNode(glm::vec2(GetMousePosition().x, GetMousePosition().y));
-            nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the starting node when user left clicks
-            newAgent.GoToNode(end);
-        }
+        //if (IsMouseButtonPressed(0))
+        //{
+        //    start = nodeMap.GetClosestNode(glm::vec2(GetMousePosition().x, GetMousePosition().y));
+        //    nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the starting node when user left clicks
+        //    newAgent.GoToNode(end);
+        //}
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
         ClearBackground(DARKGRAY);
 
-        nodeMap.Draw();
+       /* nodeMap.Draw();
         nodeMap.DrawPath(nodeMapPath, DARKPURPLE, 4);
         nodeMap.DrawPath(newAgent.m_path, ORANGE, 3);
 
         newAgent.Update(deltaTime);
-        newAgent.Draw();
+        newAgent.Draw();*/
+        newMap->DrawMap();
 
         EndDrawing();
         
