@@ -1,6 +1,7 @@
 #include "TileMap.h"
 #include <fstream>
 #include <iostream>
+#include <charconv>
 
 int defaultMap[20][20] = {
 	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -70,7 +71,7 @@ void TileMap::ChangeTextureAtMouseLoc(Vector2 mousePos, bool isEditorOpen)
 {
 	if (isEditorOpen)
 	{
-		DrawText("Texture Atlas:", 650, 20, 3, RAYWHITE);
+		DrawText("Texture Atlas:", 650, 20, 3, ORANGE);
 		DrawTexture(grassTexture, 650, 40, WHITE); DrawText("Grass: 1", 700, 40, 2, RAYWHITE);
 
 		DrawTexture(dirtTexture, 650, 80, WHITE); DrawText("Dirt: 2", 700, 80, 2, RAYWHITE);
@@ -78,6 +79,9 @@ void TileMap::ChangeTextureAtMouseLoc(Vector2 mousePos, bool isEditorOpen)
 		DrawTexture(brickTexture, 650, 120, WHITE); DrawText("Brick: 3", 700, 120, 2, RAYWHITE);
 
 		DrawTexture(waterTexture, 650, 160, WHITE); DrawText("Water: 4", 700, 160, 2, RAYWHITE);
+		
+		DrawText("S- Save edited map to file", 650, 200, 3, ORANGE);
+		DrawText("L- Load map from file", 650, 240, 3, ORANGE);
 
 		if (IsKeyDown(KEY_ONE))
 		{
@@ -111,6 +115,7 @@ void TileMap::SaveMapToFile()
 			}
 			mapSaveFile << std::endl;
 		}
+		std::cout << "Saved tile map to text document successfully!\n";
 	}
 	else
 	{
@@ -121,34 +126,34 @@ void TileMap::SaveMapToFile()
 
 void TileMap::LoadMapFromFile(const char* fileName)
 {
-	//std::fstream mapSaveFile(fileName, std::ios::in);
-	//char* loadedMap[20][40];
-	//for (int i = 0; i < 20; ++i)
-	//{
-	//	mapSaveFile.getline(*loadedMap[i], 40, ',');
-	//}
-	//for (int i = 0; i < 20; ++i)
-	//{
-	//	for (int j = 0; j < 20; ++j)
-	//	{
-	//		//move characters from loadedMap[][] to map[][]
-	//	}
-	//}
-	//LoadMap(map);
 	std::fstream file;
-	char temp[20][21];  // Allocate memory for 20 strings of up to 20 characters each (+1 for null terminator)
-
+	char temp[20][41];  // Allocate memory for 20 strings of up to 20 characters each 
+	
 	file.open("tileMapSaved.txt", std::ios::in);
 	if (file.is_open())
 	{
 		for (int i = 0; i < 20; ++i)
 		{
-			file.getline(temp[i], 41);  // 21 to account for the null terminator
-			std::cout << temp[i] << std::endl;
-			break;
+			file.getline(temp[i], 41);  // 41 to account for the commas & null pointer at the end
 		}
 	}
+	else std::cout << "Error accessing save file\n";
 	file.close();
+	
+	for (int i = 0; i < 20; ++i)	
+	{ 
+		int x = 0;
+		for (int j = 0; j < 41; j++) {
+			if (j % 2 != 0)
+			{
+				std::from_chars(temp[i] + j - 1, temp[i] + j, map[i][x]);	
+				std::cout << map[i][x];
+				++x;
+			}
+		}
+		std::cout << std::endl;
+	}
+	std::cout << "Loaded map from text file successfully!\n";
 }
 
 void TileMap::DrawMap()
@@ -160,7 +165,7 @@ void TileMap::DrawMap()
 		{
 			type = map[i][j];
 
-			dest.x = j * 32;	//set texture destination triangle to position of tile on grid, multiplied by 32 for the texture pixel size
+			dest.x = j * 32;	//set texture destination rect to the pos of the grid tile, multiplied by 32 for the texture pixel size
 			dest.y = i * 32;
 
 			switch (type)

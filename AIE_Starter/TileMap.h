@@ -9,6 +9,7 @@ public:
 	TileMap();
 	~TileMap();
 
+
 	void LoadMap(int arr[20][20]);
 	//void LoadMapFromFile(const char* fileName);
 	void ChangeTextureAtMouseLoc(Vector2 mousePos, bool isEditorOpen);
@@ -16,8 +17,10 @@ public:
 	void SaveMapToFile();
 	void LoadMapFromFile(const char* fileName);
 
+
 	void DrawMap();
 
+	int map[20][20];
 private:
 
 	Rectangle src, dest;
@@ -25,7 +28,4 @@ private:
 	Texture2D waterTexture;
 	Texture2D brickTexture;
 	Texture2D dirtTexture;
-
-	int map[20][20];
-
 };

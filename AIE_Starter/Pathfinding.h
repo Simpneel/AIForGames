@@ -4,6 +4,7 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <vector>
+#include "TileMap.h"
 
 namespace AIForGames
 {
@@ -40,6 +41,8 @@ public:
 
     AIForGames::Node** m_nodes;
     void Initialise(std::vector<std::string> asciiMap, int cellSize);
+
+    void Initialise(TileMap* tileMap, int cellSize);
 
     AIForGames::Node* GetNode(int x, int y) const { return m_nodes[x + m_width * y]; }
     AIForGames::Node* GetClosestNode(glm::vec2 worldPos);

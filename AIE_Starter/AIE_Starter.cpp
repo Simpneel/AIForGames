@@ -72,8 +72,6 @@ int main(int argc, char* argv[])
 
     nodeMap.Initialise(asciiMap, 32);
 
-    Node* start = nodeMap.GetNode(1, 1);
-    Node* end = nodeMap.GetNode(10, 1);
     std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
     
     PathAgent newAgent;
@@ -83,6 +81,14 @@ int main(int argc, char* argv[])
     //TileMap initialization
     TileMap *newMap = new TileMap();
     bool isEditorOpen = false;
+
+    NodeMap tileNodeMap;
+    tileNodeMap.Initialise(newMap, 32);
+
+    Node* start = tileNodeMap.GetNode(1, 1);
+    Node* end = tileNodeMap.GetNode(10, 1);
+    
+    std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -113,7 +119,6 @@ int main(int argc, char* argv[])
 
         newAgent.Update(deltaTime);
         newAgent.Draw();*/
-        newMap->DrawMap();
 
         if (IsKeyPressed(KEY_E))   //added editor mode, can be turned on and off by pressing 'E'
         {
@@ -121,34 +126,27 @@ int main(int argc, char* argv[])
             else isEditorOpen = true;
         }
         newMap->ChangeTextureAtMouseLoc(GetMousePosition(), isEditorOpen);
-        
+
         if (IsKeyPressed(KEY_S))
         {
             newMap->SaveMapToFile();
         }
         if (IsKeyPressed(KEY_L))
         {
+            ClearBackground(DARKGRAY);
             newMap->LoadMapFromFile("tileMapSaved.txt");
         }
+        
+
+
+        newMap->DrawMap();
+        tileNodeMap.Draw();
+        tileNodeMap.DrawPath(nodeMapPath, PURPLE, 4);
 
         EndDrawing();
         
         //----------------------------------------------------------------------------------
     }
-    std::fstream file;
-    char temp[20][21];  // Allocate memory for 20 strings of up to 20 characters each (+1 for null terminator)
-
-    file.open("tileMapSaved.txt", std::ios::in);
-    if (file.is_open())
-    {
-        for (int i = 0; i < 20; ++i)
-        {
-            file.getline(temp[i], 41);  // 21 to account for the null terminator
-            std::cout << temp[i] << std::endl;
-            break;
-        }
-    }
-    file.close();
     // De-Initialization
     //--------------------------------------------------------------------------------------   
     CloseWindow();        // Close window and OpenGL context
