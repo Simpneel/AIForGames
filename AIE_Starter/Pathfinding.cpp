@@ -103,7 +103,7 @@ void NodeMap::Initialise(TileMap* tileMap, int cellSize)
 		}
 
 	}
-	for (int y = 0; y < m_height; y++)
+	/*for (int y = 0; y < m_height; y++)
 	{
 		for (int x = 0; x < m_width; x++)
 		{
@@ -125,7 +125,7 @@ void NodeMap::Initialise(TileMap* tileMap, int cellSize)
 				}
 			}
 		}
-	}
+	}*/
 
 	for (int y = 0; y < ROWS; y++)
 	{
@@ -252,15 +252,20 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 		}
 	}
 
-	std::vector<Node*> Path;	
-	Node* currentNode = endNode;
-	while (currentNode != nullptr)
-	{
-		Path.insert(Path.begin(), currentNode);
-		currentNode = currentNode->previous;
+	if (openList.empty()) return {};
+	else {
+
+		std::vector<Node*> Path;
+		Node* currentNode = endNode;
+
+		while (currentNode != nullptr)
+		{
+			Path.insert(Path.begin(), currentNode);
+			currentNode = currentNode->previous;
+		}
+		return Path;
 	}
 
-	return Path;
 }
 
 void PathAgent::Update(float deltaTime)

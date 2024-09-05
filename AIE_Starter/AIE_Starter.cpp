@@ -81,13 +81,13 @@ int main(int argc, char* argv[])
         if (IsMouseButtonPressed(0))
         {
             start = tileNodeMap.GetClosestNode(glm::vec2(GetMousePosition().x, GetMousePosition().y));
-            nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the starting node when user left clicks
+            if (end != nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the starting node when user left clicks
             //newAgent.GoToNode(end);
         }
         if (IsMouseButtonPressed(1))
         {
             end = tileNodeMap.GetClosestNode(glm::vec2(GetMousePosition().x, GetMousePosition().y));
-            nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the ending node when user right clicks
+            if (start!= nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the ending node when user right clicks
         }
         // Draw
         //----------------------------------------------------------------------------------
