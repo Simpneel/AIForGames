@@ -103,6 +103,9 @@ void NodeMap::Initialise(TileMap* tileMap, int cellSize)
 	m_cellSize = cellSize;
 	const char emptySquare = '0';
 
+	const int grassID = 0; const int dirtID = 1; const int brickID = 2; const int waterID = 3;
+	const int grassCost = 2; const int dirtCost = 1;
+
 	m_height = ROWS;
 	m_width = COLS;
 
@@ -110,15 +113,26 @@ void NodeMap::Initialise(TileMap* tileMap, int cellSize)
 
 	for (int y = 0; y < m_height; y++)
 	{
-		int line[20];
+		int line[COLS];
 		for (int i = 0; i < COLS; i++) { line[i] = tileMap->map[y][i]; }
 
-		for (int x = 0; x < m_width; x++)
+		for (int x = 0; x < COLS; x++)
 		{
-			int tile = x < COLS ? line[x] : emptySquare;
+			int tile = line[x];
 
-			m_nodes[x + m_width * y] = tile == emptySquare ? nullptr
-				: new Node(((float)x + 0.5f) * m_cellSize, ((float)y + 0.5f) * m_cellSize);
+			switch (tile)
+			{
+			case 0: 
+			case 1:
+				m_nodes[x + m_width * y] = new Node(((float)x + 0.5f) * m_cellSize, ((float)y + 0.5f) * m_cellSize);
+				break;
+			case 2: 
+			case 3:
+				m_nodes[x + m_width * y] = nullptr;
+				break;
+			default:
+				break;
+			}
 		}
 
 	}
@@ -191,15 +205,15 @@ void NodeMap::Draw()
 			Node* node = GetNode(x, y);
 			if (node == nullptr)
 			{
-				DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
-					(int)m_cellSize - 1, (int)m_cellSize - 1, BLACK);
+				/*DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
+					(int)m_cellSize - 1, (int)m_cellSize - 1, BLACK);*/
 			}
 			else
 			{
 				for (int i = 0; i < node->connections.size(); i++)
 				{
 					Node* other = node->connections[i].target;
-					DrawLine((x + 0.5f) * m_cellSize, (y + 0.5f) * m_cellSize, (int)other->position.x, (int)other->position.y, GRAY);
+					DrawLine((x + 0.5f) * m_cellSize, (y + 0.5f) * m_cellSize, (int)other->position.x, (int)other->position.y, LIGHTGRAY);
 				}
 			}
 		}

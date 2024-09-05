@@ -100,6 +100,7 @@ void TileMap::ChangeTextureAtMouseLoc(Vector2 mousePos, bool isEditorOpen)
 			map[(int)mousePos.y / 32][(int)mousePos.x / 32] = 3;
 		}
 	}
+	LoadMap(map);
 }
 
 void TileMap::SaveMapToFile()

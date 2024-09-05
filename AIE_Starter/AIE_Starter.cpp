@@ -25,31 +25,10 @@ int main(int argc, char* argv[])
     float time = GetTime();
     float deltaTime;
     //--------------------------------------------------------------------------------------
-    /*std::vector<std::string> asciiMap1;
-    asciiMap1.push_back("000000000000");
-    asciiMap1.push_back("010111011100");
-    asciiMap1.push_back("010101110110");
-    asciiMap1.push_back("010100000000");
-    asciiMap1.push_back("010111111110");
-    asciiMap1.push_back("010000001000");
-    asciiMap1.push_back("011111111110");
-    asciiMap1.push_back("000000000000");
-
-    NodeMap newMap;
-	newMap.Initialise(asciiMap1, 50);*/
-
+   
     /*NodeMap nodeMap;
-    std::vector<std::string> asciiMap;*/
-   /* asciiMap.push_back("000000000000");
-    asciiMap.push_back("010111011100");
-    asciiMap.push_back("010101110110");
-    asciiMap.push_back("010100000000");
-    asciiMap.push_back("010111111110");
-    asciiMap.push_back("010000001000");
-    asciiMap.push_back("011111111110");
-    asciiMap.push_back("000000000000");*/
-
-    /*asciiMap.push_back("00000000000000000000");
+    std::vector<std::string> asciiMap;
+    asciiMap.push_back("00000000000000000000");
     asciiMap.push_back("01111111111111111110");
     asciiMap.push_back("00000111110000001110");
     asciiMap.push_back("01101010101010101010");
@@ -69,14 +48,8 @@ int main(int argc, char* argv[])
     asciiMap.push_back("01111111111111100000");
     asciiMap.push_back("00000000011111100000");
     asciiMap.push_back("00000000000000000000");
-
     nodeMap.Initialise(asciiMap, 32);
-
-    std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
-    
-    PathAgent newAgent;
-    newAgent.SetNode(start);
-    newAgent.SetSpeed(64);*/
+    std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);*/
 
     //TileMap initialization
     TileMap *newMap = new TileMap();
@@ -89,6 +62,10 @@ int main(int argc, char* argv[])
     Node* end = tileNodeMap.GetNode(10, 1);
     
     std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
+    
+    /*PathAgent newAgent;
+    newAgent.SetNode(start);
+    newAgent.SetSpeed(64);*/
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -127,7 +104,12 @@ int main(int argc, char* argv[])
 
         if (IsKeyPressed(KEY_E))   //added editor mode, can be turned on and off by pressing 'E'
         {
-            if (isEditorOpen) isEditorOpen = false;
+            if (isEditorOpen)
+            {
+                isEditorOpen = false;
+                tileNodeMap.Initialise(newMap, 32);
+                NodeMap::DijkstrasSearch(start, end);
+            }
             else isEditorOpen = true;
         }
         newMap->ChangeTextureAtMouseLoc(GetMousePosition(), isEditorOpen);
@@ -140,6 +122,7 @@ int main(int argc, char* argv[])
         {
             ClearBackground(DARKGRAY);
             newMap->LoadMapFromFile("tileMapSaved.txt");
+            tileNodeMap.Initialise(newMap, 32);
         }
         
 
@@ -147,6 +130,11 @@ int main(int argc, char* argv[])
         newMap->DrawMap();
         tileNodeMap.Draw();
         tileNodeMap.DrawPath(nodeMapPath, PURPLE, 4);
+
+        if (start != nullptr && end != nullptr) {
+            DrawCircle(start->position.x, start->position.y, 4, PINK);
+            DrawCircle(end->position.x, end->position.y, 4, PINK);
+        }
 
         EndDrawing();
         
