@@ -5,6 +5,7 @@
 
 #define ROWS 20
 #define COLS 20
+
 using namespace AIForGames;
 
 void NodeMap::Initialise(std::vector<std::string> asciiMap, int cellSize)
@@ -62,44 +63,6 @@ void NodeMap::Initialise(std::vector<std::string> asciiMap, int cellSize)
 
 void NodeMap::Initialise(TileMap* tileMap, int cellSize)
 {
-	/*m_cellSize = cellSize;
-	const int grassID = 0; const int dirtID = 1; const int brickID = 2; const int waterID = 3;
-	const int grassCost = 2; const int dirtCost = 1;
-
-	m_height = ROWS; 
-	m_width = COLS;
-	m_nodes = new Node * [m_width * m_height];
-
-	for (int y = 0; y < ROWS; ++y)
-	{
-		int line[20];
-		for (int i = 0; i < COLS; i++) { line[i] = tileMap->map[y][i]; }
-		 
-		for (int x = 0; x < COLS; ++x)
-		{
-			int tile = line[x];
-
-			switch (tile)
-			{
-			case 0:
-				m_nodes[x + m_width * y] = new Node((float)x + 0.5f * m_cellSize, (float)y + 0.5f * m_cellSize);
-				m_nodes[x + m_width * y]->gScore = dirtCost;
-				break;
-
-			case 1:
-				m_nodes[x + m_width * y] = new Node((float)x + 0.5f * m_cellSize, (float)y + 0.5f * m_cellSize);
-				m_nodes[x + m_width * y]->gScore = grassCost;
-				break;
-
-			case 2:
-			case 3:
-				m_nodes[x + m_width * y] = nullptr;
-				break;
-
-			default:
-				std::cout << "Error with tile map based Node initialisation\n";
-			}
-		}*/
 	m_cellSize = cellSize;
 	const char emptySquare = '0';
 
@@ -122,9 +85,13 @@ void NodeMap::Initialise(TileMap* tileMap, int cellSize)
 
 			switch (tile)
 			{
-			case 0: 
+			case 0:
+				m_nodes[x + m_width * y] = new Node(((float)x + 0.5f) * m_cellSize, ((float)y + 0.5f) * m_cellSize);
+				m_nodes[x + m_width * y]->gScore = grassCost;
+				break;
 			case 1:
 				m_nodes[x + m_width * y] = new Node(((float)x + 0.5f) * m_cellSize, ((float)y + 0.5f) * m_cellSize);
+				m_nodes[x + m_width * y]->gScore = dirtCost;
 				break;
 			case 2: 
 			case 3:
@@ -146,15 +113,15 @@ void NodeMap::Initialise(TileMap* tileMap, int cellSize)
 				Node* nodeWest = x == 0 ? nullptr : GetNode(x - 1, y);
 				if (nodeWest)
 				{
-					node->ConnectTo(nodeWest, 1);
-					nodeWest->ConnectTo(node, 1);
+					node->ConnectTo(nodeWest, nodeWest->gScore);
+					nodeWest->ConnectTo(node, node->gScore);
 				}
 
 				Node* nodeSouth = y == 0 ? nullptr : GetNode(x, y - 1);
 				if (nodeSouth)
 				{
-					node->ConnectTo(nodeSouth, 1);
-					nodeSouth->ConnectTo(node, 1);
+					node->ConnectTo(nodeSouth, nodeSouth->gScore);
+					nodeSouth->ConnectTo(node, node->gScore);
 				}
 			}
 		}
@@ -229,7 +196,6 @@ void NodeMap::DrawPath(std::vector<AIForGames::Node*> nodeMapPath, Color lineCol
 		Node* curNode = nodeMapPath.at(i);	//placeholder variable to store the current node in the path
 
 		//Drawing from last node to current node
-		//DrawLine(prevNode->position.x, prevNode->position.y, curNode->position.x, curNode->position.y, lineColor);
 		DrawLineEx(Vector2{ prevNode->position.x, prevNode->position.y }, Vector2{ curNode->position.x, curNode->position.y }, lineThickness, lineColor);
 	}
 }
@@ -286,7 +252,7 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 		}
 	}
 
-	std::vector<Node*> Path;	//return variable that will store the path found by the algorithm in reverse order 
+	std::vector<Node*> Path;	
 	Node* currentNode = endNode;
 	while (currentNode != nullptr)
 	{

@@ -58,8 +58,8 @@ int main(int argc, char* argv[])
     NodeMap tileNodeMap;
     tileNodeMap.Initialise(newMap, 32);
 
-    Node* start = tileNodeMap.GetNode(1, 1);
-    Node* end = tileNodeMap.GetNode(10, 1);
+    Node* start = nullptr;
+    Node* end = nullptr;
     
     std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
     
