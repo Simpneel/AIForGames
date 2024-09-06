@@ -153,16 +153,16 @@ void NodeMap::Draw()
 			if (node == nullptr)
 			{
 				DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
-					(int)m_cellSize - 1, (int)m_cellSize - 1, {10,10,10,200});
+					(int)m_cellSize - 1, (int)m_cellSize - 1, DARKGRAY);
 			}
 			else
 			{
 				for (int i = 0; i < node->connections.size(); i++)
 				{
 					Node* other = node->connections[i].target;
-					DrawLine((x + 0.5f) * m_cellSize, (y + 0.5f) * m_cellSize, (int)other->position.x, (int)other->position.y, LIGHTGRAY);
+					DrawLine((x + 0.5f) * m_cellSize, (y + 0.5f) * m_cellSize, (int)other->position.x, (int)other->position.y, {200,200,200,255});
 				}
-				switch (node->nodeID)
+				/*switch (node->nodeID)
 				{
 				case 0:
 					DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
@@ -174,7 +174,7 @@ void NodeMap::Draw()
 					break;
 				default:
 					break;
-				}
+				}*/
 			}
 		}
 	}
