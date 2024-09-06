@@ -87,11 +87,11 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 			{
 			case 0:
 				m_nodes[x + m_width * y] = new Node(((float)x + 0.5f) * m_cellSize, ((float)y + 0.5f) * m_cellSize);
-				m_nodes[x + m_width * y]->gScore = grassCost;
+				m_nodes[x + m_width * y]->nodeID = grassID;
 				break;
 			case 1:
 				m_nodes[x + m_width * y] = new Node(((float)x + 0.5f) * m_cellSize, ((float)y + 0.5f) * m_cellSize);
-				m_nodes[x + m_width * y]->gScore = dirtCost;
+				m_nodes[x + m_width * y]->nodeID = dirtID;
 				break;
 			case 2: 
 			case 3:
@@ -111,18 +111,21 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 			Node* node = GetNode(x, y);
 			if (node)
 			{
+				int nodeCost = node->nodeID == 0 ? grassID : dirtID;
 				Node* nodeWest = x == 0 ? nullptr : GetNode(x - 1, y);
 				if (nodeWest)
 				{
-					node->ConnectTo(nodeWest, nodeWest->gScore);
-					nodeWest->ConnectTo(node, node->gScore);
+					int nodeWestCost = node->nodeID == 0 ? grassID : dirtID;
+					node->ConnectTo(nodeWest, nodeWestCost);
+					nodeWest->ConnectTo(node, nodeCost);
 				}
 				
 				Node* nodeSouth = y == 0 ? nullptr : GetNode(x, y - 1);
 				if (nodeSouth)
 				{
-					node->ConnectTo(nodeSouth, nodeSouth->gScore);
-					nodeSouth->ConnectTo(node, node->gScore);
+					int nodeSouthCost = node->nodeID == 0 ? grassID : dirtID;
+					node->ConnectTo(nodeSouth, nodeSouthCost);
+					nodeSouth->ConnectTo(node, nodeCost);
 				}
 			}
 		}
@@ -249,25 +252,13 @@ void PathAgent::Update(float deltaTime)
 {
 	if (m_path.empty()) return;
 	
-	int distance = m_speed * deltaTime;
+	int distance = glm::distance(m_position, m_path.front()->position);
 
-	if (distance > 0)
+	for (auto it = 0; it < m_path.size(); it++)
 	{
-		glm::vec2 targetPos = m_currentNode->connections.back().target->position;
-		glm::dot(m_position, targetPos);
-	}
-	else
-	{
-		m_currentIndex++;
-		if (m_currentNode == m_path.front())
+		if (distance > 0)
 		{
-			m_position = m_path.front()->position;
-			m_path.clear();
-		}
-		else
-		{
-			distance = distance - m_speed * deltaTime;
-			m_position -= m_currentNode->position;
+			m_position += distance * glm::distance(m_position, m_path.at(it)->position);
 		}
 	}
 }

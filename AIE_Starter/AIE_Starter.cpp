@@ -59,18 +59,19 @@ int main(int argc, char* argv[])
     tileNodeMap.Initialise(newMap, 32);
 
     Node* start = tileNodeMap.GetClosestNode({2,2});
-    Node* end = nullptr;
+    Node* end = tileNodeMap.GetClosestNode({ 100,100 });
     
     std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
     
     PathAgent newAgent;
     newAgent.SetNode(start);
-    newAgent.SetSpeed(64);
+    newAgent.SetSpeed(124);
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         // Update
+        newAgent.GoToNode(end);
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         float fTime = (float)GetTime();

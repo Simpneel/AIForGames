@@ -23,6 +23,7 @@ namespace AIForGames
         std::vector<Edge> connections;
         float gScore;
         Node* previous;
+        int nodeID;
 
         Node() { gScore = 0; previous = nullptr; }
         Node(float x, float y) { position.x = x; position.y = y; gScore = 0; previous = nullptr; }
