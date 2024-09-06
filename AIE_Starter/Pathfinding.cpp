@@ -3,9 +3,6 @@
 #include <algorithm>
 #include <iostream>
 
-#define ROWS 20
-#define COLS 20
-
 using namespace AIForGames;
 
 void NodeMap::Initialise(std::vector<std::string> asciiMap, int cellSize)
@@ -61,27 +58,30 @@ void NodeMap::Initialise(std::vector<std::string> asciiMap, int cellSize)
 	}
 }
 
-void NodeMap::Initialise(TileMap* tileMap, int cellSize)
+void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 {
-	m_cellSize = cellSize;
-	const char emptySquare = '0';
+	m_cellSize = tileSize/2 ;
 
 	const int grassID = 0; const int dirtID = 1; const int brickID = 2; const int waterID = 3;
 	const int grassCost = 2; const int dirtCost = 1;
 
-	m_height = ROWS;
-	m_width = COLS;
+	m_height = tileMap->mapSize * 2;
+	m_width = tileMap->mapSize * 2;
 
 	m_nodes = new Node * [m_width * m_height];
 
 	for (int y = 0; y < m_height; y++)
 	{
-		int line[COLS];
-		for (int i = 0; i < COLS; i++) { line[i] = tileMap->map[y][i]; }
+		//int line[COLS];
+		//for (int i = 0; i < COLS; i++) 
+		//{ 
+		//	line[i] = tileMap->map[y/2][i/2]; 
+		//}
 
-		for (int x = 0; x < COLS; x++)
+		for (int x = 0; x < m_width; x++)
 		{
-			int tile = line[x];
+			//int tile = line[x/2];
+			int tile = tileMap->map[y / 2][x / 2];
 
 			switch (tile)
 			{
@@ -103,33 +103,10 @@ void NodeMap::Initialise(TileMap* tileMap, int cellSize)
 		}
 
 	}
-	/*for (int y = 0; y < m_height; y++)
+
+	for (int y = 0; y < m_height; y++)
 	{
 		for (int x = 0; x < m_width; x++)
-		{
-			Node* node = GetNode(x, y);
-			if (node)
-			{
-				Node* nodeWest = x == 0 ? nullptr : GetNode(x - 1, y);
-				if (nodeWest)
-				{
-					node->ConnectTo(nodeWest, nodeWest->gScore);
-					nodeWest->ConnectTo(node, node->gScore);
-				}
-
-				Node* nodeSouth = y == 0 ? nullptr : GetNode(x, y - 1);
-				if (nodeSouth)
-				{
-					node->ConnectTo(nodeSouth, nodeSouth->gScore);
-					nodeSouth->ConnectTo(node, node->gScore);
-				}
-			}
-		}
-	}*/
-
-	for (int y = 0; y < ROWS; y++)
-	{
-		for (int x = 0; x < COLS; x++)
 		{
 			Node* node = GetNode(x, y);
 			if (node)
@@ -271,30 +248,28 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 void PathAgent::Update(float deltaTime)
 {
 	if (m_path.empty()) return;
-	/*float dist = distance(m_path.at(m_currentIndex+1)->position, m_currentNode->position);
-	dist = dist - (m_speed * deltaTime);
-	glm::vec2 unitVec = glm::normalize(m_path.at(m_currentIndex)->position);
-	if (dist > 0)
+	
+	int distance = m_speed * deltaTime;
+
+	if (distance > 0)
 	{
-		m_position.x = m_position.x + (m_speed * deltaTime * unitVec.x);
-		m_position.y = m_position.y + (m_speed * deltaTime * unitVec.y);
+		glm::vec2 targetPos = m_currentNode->connections.back().target->position;
+		glm::dot(m_position, targetPos);
 	}
 	else
 	{
 		m_currentIndex++;
-		if (m_currentNode == m_path.back())
+		if (m_currentNode == m_path.front())
 		{
-			GoToNode(m_path.back());
+			m_position = m_path.front()->position;
 			m_path.clear();
 		}
 		else
 		{
-			dist = -dist;
-			unitVec = glm::normalize(m_currentNode->previous->position + m_path.at(m_currentIndex)->position);
-			m_position.x = m_position.x + (((m_speed * deltaTime)-dist) * unitVec.x);
-			m_position.y = m_position.y + (((m_speed * deltaTime)-dist) * unitVec.y);
+			distance = distance - m_speed * deltaTime;
+			m_position -= m_currentNode->position;
 		}
-	}*/
+	}
 }
 
 void PathAgent::GoToNode(AIForGames::Node* node)
@@ -316,5 +291,5 @@ void PathAgent::SetSpeed(float speed)
 
 void PathAgent::Draw()
 {
-	DrawCircle(m_position.x, m_position.y, 8, ORANGE);
+	DrawCircleV(Vector2(m_position.x, m_position.y), 8, ORANGE);
 }

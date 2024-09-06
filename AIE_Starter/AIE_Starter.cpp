@@ -58,14 +58,14 @@ int main(int argc, char* argv[])
     NodeMap tileNodeMap;
     tileNodeMap.Initialise(newMap, 32);
 
-    Node* start = nullptr;
+    Node* start = tileNodeMap.GetClosestNode({2,2});
     Node* end = nullptr;
     
     std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
     
-    /*PathAgent newAgent;
+    PathAgent newAgent;
     newAgent.SetNode(start);
-    newAgent.SetSpeed(64);*/
+    newAgent.SetSpeed(64);
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -81,13 +81,15 @@ int main(int argc, char* argv[])
         if (IsMouseButtonPressed(0))
         {
             start = tileNodeMap.GetClosestNode(glm::vec2(GetMousePosition().x, GetMousePosition().y));
-            if (end != nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the starting node when user left clicks
-            //newAgent.GoToNode(end);
+            if (end != nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end);
+            newAgent.SetNode(start); //resetting the search to now consider the mouse location as the starting node when user left clicks
+            newAgent.GoToNode(end);
         }
         if (IsMouseButtonPressed(1))
         {
             end = tileNodeMap.GetClosestNode(glm::vec2(GetMousePosition().x, GetMousePosition().y));
-            if (start!= nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the ending node when user right clicks
+            if (start != nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the ending node when user right clicks
+            newAgent.GoToNode(end);
         }
         // Draw
         //----------------------------------------------------------------------------------
@@ -98,9 +100,7 @@ int main(int argc, char* argv[])
         /*nodeMap.Draw();
         nodeMap.DrawPath(nodeMapPath, DARKPURPLE, 4);
         nodeMap.DrawPath(newAgent.m_path, ORANGE, 3);
-
-        newAgent.Update(deltaTime);
-        newAgent.Draw();*/
+        */
 
         if (IsKeyPressed(KEY_E))   //added editor mode, can be turned on and off by pressing 'E'
         {
@@ -135,6 +135,10 @@ int main(int argc, char* argv[])
             DrawCircle(start->position.x, start->position.y, 4, PINK);
             DrawCircle(end->position.x, end->position.y, 4, PINK);
         }
+
+        newAgent.Update(deltaTime);
+        NodeMap::DrawPath(newAgent.m_path, RAYWHITE, 5);
+        newAgent.Draw();
 
         EndDrawing();
         

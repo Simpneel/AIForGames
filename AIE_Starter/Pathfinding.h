@@ -48,7 +48,7 @@ public:
     AIForGames::Node* GetClosestNode(glm::vec2 worldPos);
 
     void Draw();
-    void DrawPath(std::vector<AIForGames::Node*> nodeMapPath, Color lineColor, float lineThickness);
+    static void DrawPath(std::vector<AIForGames::Node*> nodeMapPath, Color lineColor, float lineThickness);
 
     static std::vector<AIForGames::Node*> DijkstrasSearch(AIForGames::Node* startNode, AIForGames::Node* endNode);
 };
@@ -62,6 +62,8 @@ public:
     int m_currentIndex;
     AIForGames::Node* m_currentNode;
     float m_speed;
+
+    PathAgent() { m_position = { 0,0 }; m_currentIndex = m_speed = 0; m_currentNode = nullptr; m_path.clear(); }
 
     void Update(float deltaTime);
     void GoToNode(AIForGames::Node* node);

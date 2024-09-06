@@ -20,7 +20,9 @@ public:
 
 	void DrawMap();
 
-	int map[20][20];
+	static const int mapSize = 20;
+
+	int map[mapSize][mapSize];
 private:
 
 	Rectangle src, dest;
