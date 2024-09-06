@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
             {
                 isEditorOpen = false;
                 tileNodeMap.Initialise(newMap, 32);
-                NodeMap::DijkstrasSearch(start, end);
+                nodeMapPath = NodeMap::DijkstrasSearch(start, end);
             }
             else isEditorOpen = true;
         }

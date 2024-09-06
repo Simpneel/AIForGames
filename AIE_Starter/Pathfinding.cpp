@@ -111,11 +111,11 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 			Node* node = GetNode(x, y);
 			if (node)
 			{
-				int nodeCost = node->nodeID == 0 ? grassID : dirtID;
+				int nodeCost = node->nodeID == 0 ? grassCost : dirtCost;
 				Node* nodeWest = x == 0 ? nullptr : GetNode(x - 1, y);
 				if (nodeWest)
 				{
-					int nodeWestCost = node->nodeID == 0 ? grassID : dirtID;
+					int nodeWestCost = node->nodeID == 0 ? grassCost : dirtCost;
 					node->ConnectTo(nodeWest, nodeWestCost);
 					nodeWest->ConnectTo(node, nodeCost);
 				}
@@ -123,7 +123,7 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 				Node* nodeSouth = y == 0 ? nullptr : GetNode(x, y - 1);
 				if (nodeSouth)
 				{
-					int nodeSouthCost = node->nodeID == 0 ? grassID : dirtID;
+					int nodeSouthCost = node->nodeID == 0 ? grassCost : dirtCost;
 					node->ConnectTo(nodeSouth, nodeSouthCost);
 					nodeSouth->ConnectTo(node, nodeCost);
 				}
@@ -252,14 +252,48 @@ void PathAgent::Update(float deltaTime)
 {
 	if (m_path.empty()) return;
 	
-	int distance = glm::distance(m_position, m_path.front()->position);
+	/*Node* nextNode = m_path.at(m_currentIndex + 1);
 
-	for (auto it = 0; it < m_path.size(); it++)
+	float distance = glm::distance(m_position, nextNode->position);
+	float distTravelled = distance - (m_speed * deltaTime);
+	
+	glm::vec2 unitVec = (nextNode->position);
+
+	if (distTravelled > 0)
 	{
-		if (distance > 0)
+		m_position = { unitVec.x * m_speed * deltaTime, unitVec.y * m_speed * deltaTime };
+	}
+	else
+	{
+		m_currentIndex++;
+		if (m_currentNode == m_path.back())
 		{
-			m_position += distance * glm::distance(m_position, m_path.at(it)->position);
+			m_position = m_path.back()->position;
+			m_path.clear();
+			return;
 		}
+
+		if (nextNode)
+		{
+			distTravelled = -distTravelled;
+			m_position.x += unitVec.x + distTravelled; m_position.y += unitVec.y + distTravelled;
+		}
+	}*/
+	Node* nextNode = m_path.at(m_currentIndex + 1);
+	if (m_position.x < nextNode->position.x) m_position.x++;
+	else if (m_position.x > nextNode->position.x) m_position.x--;
+	else if (m_position.y < nextNode->position.y) m_position.y++;
+	else if (m_position.y > nextNode->position.y) m_position.y--;
+	else if (m_position == nextNode->position) {
+		m_currentNode = nextNode;
+		m_currentIndex++;
+		if (m_currentNode == m_path.back())
+		{
+			
+			m_position = m_path.back()->position;
+			m_path.clear();
+		}
+		
 	}
 }
 
