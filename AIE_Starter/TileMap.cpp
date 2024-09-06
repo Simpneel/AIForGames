@@ -44,7 +44,7 @@ TileMap::TileMap()
 		}
 	}
 
-	LoadMap(tempMap);
+	LoadMap(defaultMap);
 
 	src.x = src.y = 0;
 	src.width = dest.width = 32;	//setting default height & width to 32 based on size of textures
