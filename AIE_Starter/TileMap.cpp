@@ -33,14 +33,18 @@ TileMap::TileMap()
 	brickTexture = LoadTexture("ref/brick.png");
 	dirtTexture = LoadTexture("ref/dirt.png");
 
+	int brickwaterCounter = 0;
+
 	int tempMap[20][20];
 	for (int i = 0; i < 20; i++) {
 		for (int j = 0; j < 20; j++) {
 			tempMap[i][j] = GetRandomValue(0, 3);
+			if (tempMap[i][j] == 2 || tempMap[i][j] == 3) brickwaterCounter++;
+			if (brickwaterCounter > 3) tempMap[i][j] = brickwaterCounter = 0;
 		}
 	}
 
-	LoadMap(defaultMap);
+	LoadMap(tempMap);
 
 	src.x = src.y = 0;
 	src.width = dest.width = 32;	//setting default height & width to 32 based on size of textures

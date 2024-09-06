@@ -59,7 +59,9 @@ int main(int argc, char* argv[])
     tileNodeMap.Initialise(newMap, 32);
 
     Node* start = tileNodeMap.GetClosestNode({2,2});
+    if (start == nullptr) start = tileNodeMap.GetClosestNode({10,10});
     Node* end = tileNodeMap.GetClosestNode({ 100,100 });
+    if (end == nullptr) end = tileNodeMap.GetClosestNode({ 50,50 });
     
     std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
     
@@ -129,8 +131,12 @@ int main(int argc, char* argv[])
 
 
         newMap->DrawMap();
-        tileNodeMap.Draw();
-        tileNodeMap.DrawPath(nodeMapPath, PURPLE, 4);
+        if (IsKeyDown(KEY_N))
+        {
+            tileNodeMap.Draw();
+            tileNodeMap.DrawPath(nodeMapPath, ORANGE, 4);
+            NodeMap::DrawPath(newAgent.m_path, RED, 5);
+        }
 
         if (start != nullptr && end != nullptr) {
             DrawCircle(start->position.x, start->position.y, 4, PINK);
@@ -138,7 +144,6 @@ int main(int argc, char* argv[])
         }
 
         newAgent.Update(deltaTime);
-        NodeMap::DrawPath(newAgent.m_path, RAYWHITE, 5);
         newAgent.Draw();
 
         EndDrawing();
