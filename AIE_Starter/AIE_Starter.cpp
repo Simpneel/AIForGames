@@ -54,6 +54,7 @@ int main(int argc, char* argv[])
     //TileMap initialization
     TileMap *newMap = new TileMap();
     bool isEditorOpen = false;
+    bool isNodeViewOpen = false;
 
     NodeMap tileNodeMap;
     tileNodeMap.Initialise(newMap, 32);
@@ -68,6 +69,11 @@ int main(int argc, char* argv[])
     PathAgent newAgent;
     newAgent.SetNode(start);
     newAgent.SetSpeed(124);
+
+    Rectangle inputBox = { screenWidth / 2, screenHeight / 2, 100, 45 };
+    bool mouseOnInputBox = false;
+    int letterCount = 0;
+    char saveFileName[15];
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -100,12 +106,9 @@ int main(int argc, char* argv[])
 
         ClearBackground(DARKGRAY);
 
-        /*nodeMap.Draw();
-        nodeMap.DrawPath(nodeMapPath, DARKPURPLE, 4);
-        nodeMap.DrawPath(newAgent.m_path, ORANGE, 3);
-        */
+        DrawText("N - NodeMap View", 650, 580, 5, {15, 225, 255, 255});
 
-        if (IsKeyPressed(KEY_E))   //added editor mode, can be turned on and off by pressing 'E'
+        if (IsKeyPressed(KEY_E))   //editor mode, can be turned on and off by pressing 'E'
         {
             if (isEditorOpen)
             {
@@ -117,9 +120,33 @@ int main(int argc, char* argv[])
         }
         newMap->ChangeTextureAtMouseLoc(GetMousePosition(), isEditorOpen);
 
-        if (IsKeyPressed(KEY_S))
+        if (IsKeyPressed(KEY_S))    
         {
-            newMap->SaveMapToFile();
+            DrawRectangleRec(inputBox, LIGHTGRAY);
+            if (CheckCollisionPointRec(GetMousePosition(), inputBox)) mouseOnInputBox = true;
+            else mouseOnInputBox = false;
+            if (mouseOnInputBox)
+            {
+                SetMouseCursor(MOUSE_CURSOR_CROSSHAIR);
+                int key = GetCharPressed();
+                while (key > 0)
+                {
+                    if ((key >= 32) && (key <= 125) && (letterCount < 15))
+                    {
+                        saveFileName[letterCount] = (char)key;
+                        saveFileName[letterCount + 1] = '\0';
+                        letterCount++;
+                    }
+                    key = GetCharPressed();
+                }
+
+                if (IsKeyPressed(KEY_BACKSPACE)) {
+                    letterCount--;
+                    if (letterCount < 0) letterCount = 0;
+                    saveFileName[letterCount] = '\0';
+                }
+            }
+            else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
         }
         if (IsKeyPressed(KEY_L))
         {
@@ -131,7 +158,13 @@ int main(int argc, char* argv[])
 
 
         newMap->DrawMap();
-        if (IsKeyDown(KEY_N))
+        if (IsKeyPressed(KEY_N))
+        {
+            if (isNodeViewOpen) isNodeViewOpen = false;
+            else isNodeViewOpen = true;
+        }
+
+        if (isNodeViewOpen)
         {
             tileNodeMap.Draw();
             tileNodeMap.DrawPath(nodeMapPath, ORANGE, 4);

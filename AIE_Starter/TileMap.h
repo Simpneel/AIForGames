@@ -14,7 +14,7 @@ public:
 	//void LoadMapFromFile(const char* fileName);
 	void ChangeTextureAtMouseLoc(Vector2 mousePos, bool isEditorOpen);
 
-	void SaveMapToFile();
+	void SaveMapToFile(char saveName[15]);
 	void LoadMapFromFile(const char* fileName);
 
 

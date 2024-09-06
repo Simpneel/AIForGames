@@ -44,7 +44,7 @@ TileMap::TileMap()
 		}
 	}
 
-	LoadMap(defaultMap);
+	LoadMap(tempMap);
 
 	src.x = src.y = 0;
 	src.width = dest.width = 32;	//setting default height & width to 32 based on size of textures
@@ -107,7 +107,7 @@ void TileMap::ChangeTextureAtMouseLoc(Vector2 mousePos, bool isEditorOpen)
 	LoadMap(map);
 }
 
-void TileMap::SaveMapToFile()
+void TileMap::SaveMapToFile(char savename[15])
 {
 	std::fstream mapSaveFile;
 	mapSaveFile.open("tileMapSaved.txt", std::ios::out);
