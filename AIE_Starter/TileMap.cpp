@@ -182,7 +182,7 @@ void TileMap::DrawMap()
 				DrawTexturePro(dirtTexture, src, dest, { 0,0}, 0.0f, WHITE);
 				break;
 			case 2:
-				DrawTexturePro(brickTexture, src, dest, { 0,0 }, 0.0f, PINK);
+				DrawTexturePro(brickTexture, src, dest, { 0,0 }, 0.0f, BEIGE);
 				break;
 			case 3:
 				DrawTexturePro(waterTexture, src, dest, { 0,0 }, 0.0f, WHITE);
