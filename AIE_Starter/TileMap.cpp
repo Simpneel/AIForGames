@@ -35,9 +35,9 @@ TileMap::TileMap()
 
 	int brickwaterCounter = 0;
 
-	int tempMap[20][20];
-	for (int i = 0; i < 20; i++) {
-		for (int j = 0; j < 20; j++) {
+	int tempMap[TM_ROWS][TM_COLS];
+	for (int i = 0; i < TM_ROWS; i++) {
+		for (int j = 0; j < TM_COLS; j++) {
 			tempMap[i][j] = GetRandomValue(0, 3);
 			if (tempMap[i][j] == 2 || tempMap[i][j] == 3) brickwaterCounter++;
 			if (brickwaterCounter > 3) tempMap[i][j] = brickwaterCounter = 0;
@@ -60,11 +60,11 @@ TileMap::~TileMap()
 	UnloadTexture(dirtTexture);
 }
 
-void TileMap::LoadMap(int arr[20][20])
+void TileMap::LoadMap(int arr[TM_ROWS][TM_COLS])
 {
-	for (int i = 0; i < 20; ++i)
+	for (int i = 0; i < TM_ROWS; ++i)
 	{
-		for (int j = 0; j < 20; ++j)
+		for (int j = 0; j < TM_COLS; ++j)
 		{
 			map[i][j] = arr[i][j];	//copy over given map into my object
 		}
@@ -112,9 +112,9 @@ void TileMap::SaveMapToFile(char savename[15])
 	std::fstream mapSaveFile;
 	mapSaveFile.open("tileMapSaved.txt", std::ios::out);
 	if (mapSaveFile.is_open()) {
-		for (int i = 0; i < 20; ++i)
+		for (int i = 0; i < TM_ROWS; ++i)
 		{
-			for (int j = 0; j < 20; ++j)
+			for (int j = 0; j < TM_COLS; ++j)
 			{
 				mapSaveFile << (map[i][j]) << ",";
 			}
@@ -132,12 +132,12 @@ void TileMap::SaveMapToFile(char savename[15])
 void TileMap::LoadMapFromFile(const char* fileName)
 {
 	std::fstream file;
-	char temp[20][41];  // Allocate memory for 20 strings of up to 20 characters each 
+	char temp[TM_ROWS][TM_COLS*2 + 1];  // Allocate memory for 20 strings of up to 20 characters each 
 	
 	file.open("tileMapSaved.txt", std::ios::in);
 	if (file.is_open())
 	{
-		for (int i = 0; i < 20; ++i)
+		for (int i = 0; i < TM_ROWS; ++i)
 		{
 			file.getline(temp[i], 41);  // 41 to account for the commas & null pointer at the end
 		}
@@ -145,10 +145,10 @@ void TileMap::LoadMapFromFile(const char* fileName)
 	else std::cout << "Error accessing save file\n";
 	file.close();
 	
-	for (int i = 0; i < 20; ++i)	
+	for (int i = 0; i < TM_ROWS; ++i)	
 	{ 
 		int x = 0;
-		for (int j = 0; j < 41; j++) {
+		for (int j = 0; j < (TM_COLS * 2 + 1); j++) {
 			if (j % 2 != 0)
 			{
 				std::from_chars(temp[i] + j - 1, temp[i] + j, map[i][x]);	
@@ -164,9 +164,9 @@ void TileMap::LoadMapFromFile(const char* fileName)
 void TileMap::DrawMap()
 {
 	int type = 0;
-	for (int i = 0; i < 20; ++i)
+	for (int i = 0; i < TM_ROWS; ++i)
 	{
-		for (int j = 0; j < 20; ++j)
+		for (int j = 0; j < TM_COLS; ++j)
 		{
 			type = map[i][j];
 

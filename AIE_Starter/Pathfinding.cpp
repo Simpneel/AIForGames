@@ -166,7 +166,7 @@ void NodeMap::Draw()
 				{
 				case 0:
 					DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
-						(int)m_cellSize - 1, (int)m_cellSize - 1, BEIGE);
+						(int)m_cellSize - 1, (int)m_cellSize - 1, DARKGREEN);
 					break;
 				case 1:
 					DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
@@ -293,6 +293,7 @@ void PathAgent::Update(float deltaTime)
 		}
 	}*/
 	Node* nextNode = m_path.at(m_currentIndex + 1);
+
 	if (m_position.x < nextNode->position.x) m_position.x++;
 	else if (m_position.x > nextNode->position.x) m_position.x--;
 	else if (m_position.y < nextNode->position.y) m_position.y++;
@@ -302,7 +303,6 @@ void PathAgent::Update(float deltaTime)
 		m_currentIndex++;
 		if (m_currentNode == m_path.back())
 		{
-			
 			m_position = m_path.back()->position;
 			m_path.clear();
 		}

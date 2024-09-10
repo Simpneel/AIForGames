@@ -2,6 +2,9 @@
 
 #include "raylib.h"
 
+#define TM_ROWS 20
+#define TM_COLS 20
+
 class TileMap
 {
 public:
@@ -10,7 +13,7 @@ public:
 	~TileMap();
 
 
-	void LoadMap(int arr[20][20]);
+	void LoadMap(int arr[TM_ROWS][TM_COLS]);
 	//void LoadMapFromFile(const char* fileName);
 	void ChangeTextureAtMouseLoc(Vector2 mousePos, bool isEditorOpen);
 
