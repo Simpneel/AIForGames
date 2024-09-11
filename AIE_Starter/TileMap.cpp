@@ -28,10 +28,20 @@ int defaultMap[20][20] = {
 
 TileMap::TileMap()
 {
-	grassTexture = LoadTexture("ref/grass.png");
-	waterTexture = LoadTexture("ref/water.png");
-	brickTexture = LoadTexture("ref/brick.png");
-	dirtTexture = LoadTexture("ref/dirt.png");
+	Image grassImg = LoadImage("ref/grass.png");
+	Image dirtImg = LoadImage("ref/dirt.png");
+	Image brickImg = LoadImage("ref/brick.png");
+	Image waterImg = LoadImage("ref/water.png");
+
+	grassTexture = LoadTextureFromImage(grassImg);
+	dirtTexture = LoadTextureFromImage(dirtImg);
+	brickTexture = LoadTextureFromImage(brickImg);
+	waterTexture = LoadTextureFromImage(waterImg);
+
+	UnloadImage(grassImg);
+	UnloadImage(dirtImg);
+	UnloadImage(brickImg);
+	UnloadImage(waterImg);
 
 	int brickwaterCounter = 0;
 
@@ -40,7 +50,7 @@ TileMap::TileMap()
 		for (int j = 0; j < TM_COLS; j++) {
 			tempMap[i][j] = GetRandomValue(0, 3);
 			if (tempMap[i][j] == 2 || tempMap[i][j] == 3) brickwaterCounter++;
-			if (brickwaterCounter > 3) tempMap[i][j] = brickwaterCounter = 0;
+			if (brickwaterCounter > 2) tempMap[i][j] = brickwaterCounter = 0;
 		}
 	}
 
@@ -75,17 +85,21 @@ void TileMap::ChangeTextureAtMouseLoc(Vector2 mousePos, bool isEditorOpen)
 {
 	if (isEditorOpen)
 	{
-		DrawText("Texture Atlas:", 650, 20, 3, ORANGE);
-		DrawTexture(grassTexture, 650, 40, WHITE); DrawText("Grass: 1", 700, 40, 2, RAYWHITE);
+		int mapWidth = TM_COLS * 32;
+		int mapHeight = TM_ROWS * 32;
 
-		DrawTexture(dirtTexture, 650, 80, WHITE); DrawText("Dirt: 2", 700, 80, 2, RAYWHITE);
+		DrawText("Texture Atlas:", (mapWidth + 20), 20, 3, ORANGE);
 
-		DrawTexture(brickTexture, 650, 120, WHITE); DrawText("Brick: 3", 700, 120, 2, RAYWHITE);
+		DrawTexture(grassTexture, (mapWidth + 20), 40, WHITE); DrawText("Grass: 1", (mapWidth + 55), 45, 2, RAYWHITE);
 
-		DrawTexture(waterTexture, 650, 160, WHITE); DrawText("Water: 4", 700, 160, 2, RAYWHITE);
+		DrawTexture(dirtTexture, (mapWidth + 20), 80, WHITE); DrawText("Dirt: 2", (mapWidth + 55), 85, 2, RAYWHITE);
+
+		DrawTexture(brickTexture, (mapWidth + 20), 120, WHITE); DrawText("Brick: 3", (mapWidth + 55), 125, 2, RAYWHITE);
+
+		DrawTexture(waterTexture, (mapWidth + 20), 160, WHITE); DrawText("Water: 4", (mapWidth + 55), 165, 2, RAYWHITE);
 		
-		DrawText("S- Save edited map to file", 650, 200, 3, ORANGE);
-		DrawText("L- Load map from file", 650, 240, 3, ORANGE);
+		DrawText("S- Save edited map to file", (mapWidth + 20), 200, 3, ORANGE);
+		DrawText("L- Load map from file", (mapWidth + 20), 240, 3, ORANGE);
 
 		if (IsKeyDown(KEY_ONE))
 		{

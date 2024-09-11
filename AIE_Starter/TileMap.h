@@ -3,6 +3,7 @@
 #include "raylib.h"
 
 #define TM_ROWS 20
+
 #define TM_COLS 20
 
 class TileMap
@@ -23,9 +24,7 @@ public:
 
 	void DrawMap();
 
-	static const int mapSize = 20;
-
-	int map[mapSize][mapSize];
+	int map[TM_ROWS][TM_COLS];
 private:
 
 	Rectangle src, dest;

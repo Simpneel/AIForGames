@@ -52,6 +52,7 @@ public:
     static void DrawPath(std::vector<AIForGames::Node*> nodeMapPath, Color lineColor, float lineThickness);
 
     static std::vector<AIForGames::Node*> DijkstrasSearch(AIForGames::Node* startNode, AIForGames::Node* endNode);
+    static std::vector<AIForGames::Node*> AStarSearch(AIForGames::Node* startNode, AIForGames::Node* endNode);
 };
 
 class PathAgent

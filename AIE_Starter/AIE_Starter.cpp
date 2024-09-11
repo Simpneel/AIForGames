@@ -15,8 +15,8 @@ int main(int argc, char* argv[])
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    int screenWidth = 800;
-    int screenHeight = 640;
+    int screenWidth = TM_ROWS * 32 + 200;
+    int screenHeight = TM_COLS * 32 + 25;
 
     InitWindow(screenWidth, screenHeight, "AI For Games: Pathfinding");
 
@@ -120,6 +120,31 @@ int main(int argc, char* argv[])
         }
         newMap->ChangeTextureAtMouseLoc(GetMousePosition(), isEditorOpen);
 
+        
+
+
+        newMap->DrawMap();
+        if (IsKeyPressed(KEY_N))
+        {
+            if (isNodeViewOpen) isNodeViewOpen = false;
+            else isNodeViewOpen = true;
+        }
+
+        if (isNodeViewOpen)
+        {
+            tileNodeMap.Draw();
+            tileNodeMap.DrawPath(nodeMapPath, ORANGE, 4);
+            NodeMap::DrawPath(newAgent.m_path, RED, 5);
+        }
+
+        if (start != nullptr && end != nullptr) {
+            DrawCircle(start->position.x, start->position.y, 4, PINK);
+            DrawCircle(end->position.x, end->position.y, 4, PINK);
+        }
+
+        newAgent.Update(deltaTime);
+        newAgent.Draw();
+        
         if (IsKeyPressed(KEY_S))    
         {
             DrawRectangleRec(inputBox, LIGHTGRAY);
@@ -154,30 +179,6 @@ int main(int argc, char* argv[])
             newMap->LoadMapFromFile("tileMapSaved.txt");
             tileNodeMap.Initialise(newMap, 32);
         }
-        
-
-
-        newMap->DrawMap();
-        if (IsKeyPressed(KEY_N))
-        {
-            if (isNodeViewOpen) isNodeViewOpen = false;
-            else isNodeViewOpen = true;
-        }
-
-        if (isNodeViewOpen)
-        {
-            tileNodeMap.Draw();
-            tileNodeMap.DrawPath(nodeMapPath, ORANGE, 4);
-            NodeMap::DrawPath(newAgent.m_path, RED, 5);
-        }
-
-        if (start != nullptr && end != nullptr) {
-            DrawCircle(start->position.x, start->position.y, 4, PINK);
-            DrawCircle(end->position.x, end->position.y, 4, PINK);
-        }
-
-        newAgent.Update(deltaTime);
-        newAgent.Draw();
 
         EndDrawing();
         

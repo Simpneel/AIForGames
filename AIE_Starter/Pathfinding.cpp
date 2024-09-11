@@ -63,10 +63,13 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 	m_cellSize = tileSize/2 ;
 
 	const int grassID = 0; const int dirtID = 1; const int brickID = 2; const int waterID = 3;
-	const int grassCost = 2; const int dirtCost = 1;
+	const int grassCost = 2; const int dirtCost = 1; const int waterCost = 4;
 
-	m_height = tileMap->mapSize * 2;
-	m_width = tileMap->mapSize * 2;
+	/*m_height = tileMap->mapSize * 2;
+	m_width = tileMap->mapSize * 2;*/
+
+	m_height = TM_ROWS * 2;
+	m_width = TM_COLS * 2;
 
 	m_nodes = new Node * [m_width * m_height];
 
@@ -94,14 +97,15 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 				m_nodes[x + m_width * y]->nodeID = dirtID;
 				break;
 			case 2: 
-			case 3:
 				m_nodes[x + m_width * y] = nullptr;
 				break;
+			case 3:
+				m_nodes[x + m_width * y] = new Node(((float)x + 0.5f) * m_cellSize, ((float)y + 0.5f) * m_cellSize);
+				m_nodes[x + m_width * y]->nodeID = waterID;
 			default:
 				break;
 			}
 		}
-
 	}
 
 	for (int y = 0; y < m_height; y++)
@@ -259,6 +263,11 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 		return Path;
 	}
 
+}
+
+std::vector<AIForGames::Node*> NodeMap::AStarSearch(AIForGames::Node* startNode, AIForGames::Node* endNode)
+{
+	return std::vector<AIForGames::Node*>();
 }
 
 void PathAgent::Update(float deltaTime)
