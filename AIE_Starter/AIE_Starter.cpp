@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
     Node* start = tileNodeMap.GetClosestNode({2,2});
     if (start == nullptr) start = tileNodeMap.GetClosestNode({10,10});
     Node* end = tileNodeMap.GetClosestNode({ 100,100 });
-    if (end == nullptr) end = tileNodeMap.GetClosestNode({ 50,50 });
+    if (end == nullptr) end = tileNodeMap.GetClosestNode({ 500,500 });
     
     std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
     

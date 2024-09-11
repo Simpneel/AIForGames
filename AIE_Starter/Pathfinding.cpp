@@ -468,5 +468,8 @@ void PathAgent::SetSpeed(float speed)
 
 void PathAgent::Draw()
 {
-	DrawCircleV(Vector2(m_position.x, m_position.y), 8, ORANGE);
+	//DrawCircleV(Vector2(m_position.x, m_position.y), 8, ORANGE);
+	//DrawCircleLines(m_position.x, m_position.y, 9, PURPLE);
+	DrawCircleGradient(m_position.x, m_position.y, 8, SKYBLUE, DARKPURPLE);
+	DrawCircleLines(m_position.x, m_position.y, 8, RED);
 }
