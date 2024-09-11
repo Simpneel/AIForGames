@@ -60,7 +60,7 @@ void NodeMap::Initialise(std::vector<std::string> asciiMap, int cellSize)
 
 void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 {
-	m_cellSize = tileSize/2 ;
+	m_cellSize = tileSize / 2;
 
 	const int grassID = 0; const int dirtID = 1; const int brickID = 2; const int waterID = 3;
 	const int grassCost = 2; const int dirtCost = 1; const int waterCost = 4;
@@ -96,7 +96,7 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 				m_nodes[x + m_width * y] = new Node(((float)x + 0.5f) * m_cellSize, ((float)y + 0.5f) * m_cellSize);
 				m_nodes[x + m_width * y]->nodeID = dirtID;
 				break;
-			case 2: 
+			case 2:
 				m_nodes[x + m_width * y] = nullptr;
 				break;
 			case 3:
@@ -108,7 +108,7 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 		}
 	}
 
-	for (int y = 0; y < m_height; y++)
+	/*for (int y = 0; y < m_height; y++)
 	{
 		for (int x = 0; x < m_width; x++)
 		{
@@ -123,11 +123,84 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 					node->ConnectTo(nodeWest, nodeWestCost);
 					nodeWest->ConnectTo(node, nodeCost);
 				}
-				
+
 				Node* nodeSouth = y == 0 ? nullptr : GetNode(x, y - 1);
 				if (nodeSouth)
 				{
 					int nodeSouthCost = node->nodeID == 0 ? grassCost : dirtCost;
+					node->ConnectTo(nodeSouth, nodeSouthCost);
+					nodeSouth->ConnectTo(node, nodeCost);
+				}
+			}
+		}
+	}*/
+
+	for (int y = 0; y < m_height; y++)
+	{
+		for (int x = 0; x < m_width; x++)
+		{
+			Node* node = GetNode(x, y);
+			if (node)
+			{
+				int nodeCost;
+				switch (node->nodeID)
+				{
+				case grassID:
+					nodeCost = grassCost;
+					break;
+				case dirtID:
+					nodeCost = dirtCost;
+					break;
+				case waterID:
+					nodeCost = waterCost;
+					break;
+				default:
+					std::cout << "ERROR! Invalid node ID\n";
+					break;
+				}
+
+				Node* nodeWest = x == 0 ? nullptr : GetNode(x - 1, y);
+				if (nodeWest)
+				{
+					int nodeWestCost;
+					switch (nodeWest->nodeID)
+					{
+					case grassID:
+						nodeWestCost = grassCost;
+						break;
+					case dirtID:
+						nodeWestCost = dirtCost;
+						break;
+					case waterID:
+						nodeWestCost = waterCost;
+						break;
+					default:
+						std::cout << "ERROR! Invalid node ID\n";
+						break;
+					}
+					node->ConnectTo(nodeWest, nodeWestCost);
+					nodeWest->ConnectTo(node, nodeCost);
+				}
+
+				Node* nodeSouth = y == 0 ? nullptr : GetNode(x, y - 1);
+				if (nodeSouth)
+				{
+					int nodeSouthCost;
+					switch (nodeSouth->nodeID)
+					{
+					case grassID:
+						nodeSouthCost = grassCost;
+						break;
+					case dirtID:
+						nodeSouthCost = dirtCost;
+						break;
+					case waterID:
+						nodeSouthCost = waterCost;
+						break;
+					default:
+						std::cout << "ERROR! Invalid node ID\n";
+						break;
+					}
 					node->ConnectTo(nodeSouth, nodeSouthCost);
 					nodeSouth->ConnectTo(node, nodeCost);
 				}
@@ -166,19 +239,22 @@ void NodeMap::Draw()
 					Node* other = node->connections[i].target;
 					DrawLine((x + 0.5f) * m_cellSize, (y + 0.5f) * m_cellSize, (int)other->position.x, (int)other->position.y, {200,200,200,255});
 				}
-				/*switch (node->nodeID)
+				switch (node->nodeID)
 				{
 				case 0:
 					DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
-						(int)m_cellSize - 1, (int)m_cellSize - 1, DARKGREEN);
+						(int)m_cellSize, (int)m_cellSize , LIME);
 					break;
 				case 1:
 					DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
-						(int)m_cellSize - 1, (int)m_cellSize - 1, GREEN);
+						(int)m_cellSize - 1, (int)m_cellSize , GREEN);
 					break;
+				case 3:
+					DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
+						(int)m_cellSize, (int)m_cellSize, DARKGREEN);
 				default:
 					break;
-				}*/
+				}
 			}
 		}
 	}

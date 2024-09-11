@@ -79,7 +79,6 @@ int main(int argc, char* argv[])
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         // Update
-        newAgent.GoToNode(end);
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         float fTime = (float)GetTime();
@@ -97,9 +96,12 @@ int main(int argc, char* argv[])
         if (IsMouseButtonPressed(1))
         {
             end = tileNodeMap.GetClosestNode(glm::vec2(GetMousePosition().x, GetMousePosition().y));
+            if (end == nullptr) exit;
             if (start != nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the ending node when user right clicks
             newAgent.GoToNode(end);
         }
+        
+        newAgent.GoToNode(end);
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
