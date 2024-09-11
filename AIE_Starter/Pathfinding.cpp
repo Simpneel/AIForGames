@@ -434,10 +434,10 @@ void PathAgent::Update(float deltaTime)
 	Node* nextNode = m_path.at(m_currentIndex + 1);
 
 	if (m_position.x < nextNode->position.x) m_position.x++;
-	else if (m_position.x > nextNode->position.x) m_position.x--;
-	else if (m_position.y < nextNode->position.y) m_position.y++;
-	else if (m_position.y > nextNode->position.y) m_position.y--;
-	else if (m_position == nextNode->position) {
+	if (m_position.x > nextNode->position.x) m_position.x--;
+	if (m_position.y < nextNode->position.y) m_position.y++;
+	if (m_position.y > nextNode->position.y) m_position.y--;
+	if (m_position == nextNode->position) {
 		m_currentNode = nextNode;
 		m_currentIndex++;
 		if (m_currentNode == m_path.back())
