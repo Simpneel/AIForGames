@@ -231,11 +231,11 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 
 				if (nodeWest && nodeSouth && nodeEast)
 				{
-					nodeWest->ConnectTo(nodeSouth, nodeSouthCost);
-					nodeSouth->ConnectTo(nodeWest, nodeWestCost);
+					nodeWest->ConnectTo(nodeSouth, nodeSouthCost * 1.05f);
+					nodeSouth->ConnectTo(nodeWest, nodeWestCost * 1.05f);
 
-					nodeEast->ConnectTo(nodeSouth, nodeSouthCost);
-					nodeSouth->ConnectTo(nodeEast, nodeEastCost);
+					nodeEast->ConnectTo(nodeSouth, nodeSouthCost * 1.05f);
+					nodeSouth->ConnectTo(nodeEast, nodeEastCost * 1.05f);
 				}
 			}
 		}
