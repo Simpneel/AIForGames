@@ -143,6 +143,10 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 			if (node)
 			{
 				int nodeCost;
+				int nodeWestCost;
+				int nodeEastCost;
+				int nodeSouthCost;
+
 				switch (node->nodeID)
 				{
 				case grassID:
@@ -162,7 +166,6 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 				Node* nodeWest = x == 0 ? nullptr : GetNode(x - 1, y);
 				if (nodeWest)
 				{
-					int nodeWestCost;
 					switch (nodeWest->nodeID)
 					{
 					case grassID:
@@ -182,10 +185,31 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 					nodeWest->ConnectTo(node, nodeCost);
 				}
 
+				Node* nodeEast = x == (m_width - 1) ? nullptr : GetNode(x + 1, y);
+				if (nodeEast)
+				{
+					switch (nodeEast->nodeID)
+					{
+					case grassID:
+						nodeEastCost = grassCost;
+						break;
+					case dirtID:
+						nodeEastCost = dirtCost;
+						break;
+					case waterID:
+						nodeEastCost = waterCost;
+						break;
+					default:
+						std::cout << "ERROR! Invalid node ID\n";
+						break;
+					}
+					node->ConnectTo(nodeEast, nodeEastCost);
+					nodeEast->ConnectTo(node, nodeCost);
+				}
+
 				Node* nodeSouth = y == 0 ? nullptr : GetNode(x, y - 1);
 				if (nodeSouth)
 				{
-					int nodeSouthCost;
 					switch (nodeSouth->nodeID)
 					{
 					case grassID:
@@ -204,6 +228,15 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 					node->ConnectTo(nodeSouth, nodeSouthCost);
 					nodeSouth->ConnectTo(node, nodeCost);
 				}
+
+				if (nodeWest && nodeSouth && nodeEast)
+				{
+					nodeWest->ConnectTo(nodeSouth, nodeSouthCost);
+					nodeSouth->ConnectTo(nodeWest, nodeWestCost);
+
+					nodeEast->ConnectTo(nodeSouth, nodeSouthCost);
+					nodeSouth->ConnectTo(nodeEast, nodeEastCost);
+				}
 			}
 		}
 	}
@@ -220,8 +253,6 @@ AIForGames::Node* NodeMap::GetClosestNode(glm::vec2 worldPos)
 
 void NodeMap::Draw()
 {
-	
-
 	for (int y = 0; y < m_height; y++)
 	{
 		for (int x = 0; x < m_width; x++)
@@ -338,12 +369,35 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 		}
 		return Path;
 	}
-
 }
 
 std::vector<AIForGames::Node*> NodeMap::AStarSearch(AIForGames::Node* startNode, AIForGames::Node* endNode)
 {
 	return std::vector<AIForGames::Node*>();
+
+	if (startNode == endNode) return {};
+	if (startNode == nullptr || endNode == nullptr) std::cout << "A-STAR Start or End node are nullptr, recheck code\n";
+
+	startNode->previous = nullptr;
+	startNode->gScore = 0;
+
+	std::vector<Node*> openList, closedList;
+	
+	openList.insert(openList.begin(), startNode);
+	while (!openList.empty())
+	{
+		//sorting the open list using G Scores via a custom compare function [compareGScore]
+		std::sort(openList.begin(), openList.end(), compareGScore);
+		Node* currentNode = openList.front();
+
+		//checking if the search has reached the final node of the search i.e. the end node
+		if (currentNode == endNode) break;
+
+		//moving current node from openList to closedList
+		openList.erase(std::remove(openList.begin(), openList.end(), currentNode), openList.end());
+		closedList.push_back(currentNode);
+	}
+
 }
 
 void PathAgent::Update(float deltaTime)

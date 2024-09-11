@@ -73,7 +73,8 @@ int main(int argc, char* argv[])
     Rectangle inputBox = { screenWidth / 2, screenHeight / 2, 100, 45 };
     bool mouseOnInputBox = false;
     int letterCount = 0;
-    char saveFileName[15];
+    char saveFileName[17];
+    newAgent.GoToNode(end);
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -101,7 +102,6 @@ int main(int argc, char* argv[])
             newAgent.GoToNode(end);
         }
         
-        newAgent.GoToNode(end);
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -121,9 +121,6 @@ int main(int argc, char* argv[])
             else isEditorOpen = true;
         }
         newMap->ChangeTextureAtMouseLoc(GetMousePosition(), isEditorOpen);
-
-        
-
 
         newMap->DrawMap();
         if (IsKeyPressed(KEY_N))
@@ -147,33 +144,12 @@ int main(int argc, char* argv[])
         newAgent.Update(deltaTime);
         newAgent.Draw();
         
-        if (IsKeyPressed(KEY_S))    
+        if (IsKeyPressed(KEY_S))     
         {
-            DrawRectangleRec(inputBox, LIGHTGRAY);
-            if (CheckCollisionPointRec(GetMousePosition(), inputBox)) mouseOnInputBox = true;
-            else mouseOnInputBox = false;
-            if (mouseOnInputBox)
-            {
-                SetMouseCursor(MOUSE_CURSOR_CROSSHAIR);
-                int key = GetCharPressed();
-                while (key > 0)
-                {
-                    if ((key >= 32) && (key <= 125) && (letterCount < 15))
-                    {
-                        saveFileName[letterCount] = (char)key;
-                        saveFileName[letterCount + 1] = '\0';
-                        letterCount++;
-                    }
-                    key = GetCharPressed();
-                }
 
-                if (IsKeyPressed(KEY_BACKSPACE)) {
-                    letterCount--;
-                    if (letterCount < 0) letterCount = 0;
-                    saveFileName[letterCount] = '\0';
-                }
-            }
-            else SetMouseCursor(MOUSE_CURSOR_DEFAULT);
+
+
+            newMap->SaveMapToFile(saveFileName);
         }
         if (IsKeyPressed(KEY_L))
         {
