@@ -89,9 +89,10 @@ int main(int argc, char* argv[])
         // Update
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
-        float fTime = (float)GetTime();
+
+        /*float fTime = (float)GetTime();
         deltaTime = fTime - time;
-        time = fTime;
+        time = fTime;*/
         
         //----------------------------------------------------------------------------------
         if (IsMouseButtonPressed(0))
@@ -116,6 +117,7 @@ int main(int argc, char* argv[])
         BeginDrawing();
 
         ClearBackground(DARKGRAY);
+        DrawFPS(screenWidth - 50, screenHeight - 25);
 
         DrawText("N - NodeMap View", 650, 580, 5, {15, 225, 255, 255});
 
@@ -150,7 +152,7 @@ int main(int argc, char* argv[])
             DrawCircle(end->position.x, end->position.y, 4, PINK);
         }
 
-        newAgent.Update(deltaTime);
+        newAgent.Update(/*deltaTime*/);
         newAgent.Draw();
 
         /*pacman.Update(deltaTime);

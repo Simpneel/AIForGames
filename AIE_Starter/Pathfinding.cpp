@@ -261,11 +261,11 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 					nodeSouth->ConnectTo(node, nodeCost);
 					if (nodeWest && nodeEast)
 					{
-						nodeWest->ConnectTo(nodeSouth, nodeSouthCost * 1.05f);
-						nodeSouth->ConnectTo(nodeWest, nodeWestCost * 1.05f);
+						nodeWest->ConnectTo(nodeSouth, nodeSouthCost * 1.25f);
+						nodeSouth->ConnectTo(nodeWest, nodeWestCost * 1.25f);
 
-						nodeEast->ConnectTo(nodeSouth, nodeSouthCost * 1.05f);
-						nodeSouth->ConnectTo(nodeEast, nodeEastCost * 1.05f);
+						nodeEast->ConnectTo(nodeSouth, nodeSouthCost * 1.25f);
+						nodeSouth->ConnectTo(nodeEast, nodeEastCost * 1.25f);
 					}
 				}
 			}
@@ -292,7 +292,7 @@ void NodeMap::Draw()
 			if (node == nullptr)
 			{
 				DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
-					(int)m_cellSize - 1, (int)m_cellSize - 1, DARKGRAY);
+					(int)m_cellSize , (int)m_cellSize , DARKGRAY);
 			}
 			else
 			{
@@ -309,7 +309,7 @@ void NodeMap::Draw()
 					break;
 				case 1:
 					DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
-						(int)m_cellSize - 1, (int)m_cellSize , GREEN);
+						(int)m_cellSize , (int)m_cellSize , GREEN);
 					break;
 				case 3:
 					DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
@@ -317,6 +317,8 @@ void NodeMap::Draw()
 				default:
 					break;
 				}
+				/*DrawRectangle((int)(x * m_cellSize), (int)(y * m_cellSize),
+					(int)m_cellSize, (int)m_cellSize, GRAY);*/
 			}
 		}
 	}
@@ -437,7 +439,7 @@ float NodeMap::EuclideanDistance(glm::vec2 pos1, glm::vec2 pos2)
 	return glm::sqrt(glm::pow((pos1.x - pos2.x), 2) + glm::pow((pos1.y - pos2.y), 2));
 }
 
-void PathAgent::Update(float deltaTime)
+void PathAgent::Update(/*float deltaTime*/)
 {
 	if (m_path.empty()) return;
 	
