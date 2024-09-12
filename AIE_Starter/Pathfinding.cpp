@@ -428,14 +428,8 @@ std::vector<AIForGames::Node*> NodeMap::AStarSearch(AIForGames::Node* startNode,
 		openList.erase(std::remove(openList.begin(), openList.end(), currentNode), openList.end());
 		closedList.push_back(currentNode);
 		float dist = EuclideanDistance(currentNode->position, currentNode->connections.front().target->position);
-
-		if (dist <= glm::abs(startNode->position.x + endNode->position.x))
-		{
-			
-		}
-	
+		
 	}
-
 }
 
 float NodeMap::EuclideanDistance(glm::vec2 pos1, glm::vec2 pos2)
@@ -525,7 +519,7 @@ void PathAgent::Draw()
 		DrawTexturePro(agentTexture,
 			Rectangle{ 0.0f, 0.0f, (float)agentTexture.width, (float)agentTexture.height },
 			Rectangle{ m_position.x, m_position.y, (float)agentTexture.width, (float)agentTexture.height },
-			Vector2{},
+			Vector2{ (float)agentTexture.width * .5f, (float)agentTexture.height - 16.f },
 			0.0f, WHITE);
 	}
 	else
@@ -533,7 +527,7 @@ void PathAgent::Draw()
 		DrawTexturePro(agentTexture,
 			Rectangle{ 0.0f, 0.0f, -(float)agentTexture.width, (float)agentTexture.height },
 			Rectangle{ m_position.x, m_position.y, (float)agentTexture.width, (float)agentTexture.height },
-			Vector2{ (float)agentTexture.width * .5f, (float)agentTexture.height * .25f },
+			Vector2{ (float)agentTexture.width * .5f, (float)agentTexture.height - 16.f },
 			0.0f, WHITE);
 	}
 }

@@ -158,9 +158,6 @@ int main(int argc, char* argv[])
         
         if (IsKeyPressed(KEY_S))     
         {
-
-
-
             newMap->SaveMapToFile(saveFileName);
         }
         if (IsKeyPressed(KEY_L))
