@@ -32,6 +32,7 @@ TileMap::TileMap()
 	Image dirtImg = LoadImage("ref/dirt.png");
 	Image brickImg = LoadImage("ref/brick.png");
 	Image waterImg = LoadImage("ref/water.png");
+	tileSize = 32;
 
 	grassTexture = LoadTextureFromImage(grassImg);
 	dirtTexture = LoadTextureFromImage(dirtImg);
@@ -57,8 +58,8 @@ TileMap::TileMap()
 	LoadMap(tempMap);
 
 	src.x = src.y = 0;
-	src.width = dest.width = 32;	//setting default height & width to 32 based on size of textures
-	src.height = dest.height = 32;
+	src.width = dest.width = tileSize;	//setting default height & width to tileSize; based on size of textures
+	src.height = dest.height = tileSize;
 	dest.x = dest.y = 0;
 }
 
@@ -85,12 +86,16 @@ void TileMap::ChangeTextureAtMouseLoc(Vector2 mousePos, bool isEditorOpen)
 {
 	if (isEditorOpen)
 	{
-		int mapWidth = TM_COLS * 32;
-		int mapHeight = TM_ROWS * 32;
+		int mapWidth = TM_COLS * tileSize;
+		int mapHeight = TM_ROWS * tileSize;
 
 		DrawText("Texture Atlas:", (mapWidth + 20), 20, 3, ORANGE);
 
 		DrawTexture(grassTexture, (mapWidth + 20), 40, WHITE); DrawText("Grass: 1", (mapWidth + 55), 45, 2, RAYWHITE);
+
+		DrawTextureTiled(dirtTexture, Rectangle{},
+			Rectangle{}, Vector2{},
+			0.0f, 0.5f, WHITE);
 
 		DrawTexture(dirtTexture, (mapWidth + 20), 80, WHITE); DrawText("Dirt: 2", (mapWidth + 55), 85, 2, RAYWHITE);
 
@@ -103,19 +108,19 @@ void TileMap::ChangeTextureAtMouseLoc(Vector2 mousePos, bool isEditorOpen)
 
 		if (IsKeyDown(KEY_ONE))
 		{
-			map[(int)mousePos.y / 32][(int)mousePos.x / 32] = 0;
+			map[(int)(mousePos.y / tileSize)][(int)(mousePos.x / tileSize)] = 0;
 		}
 		else if (IsKeyDown(KEY_TWO))
 		{
-			map[(int)mousePos.y / 32][(int)mousePos.x / 32] = 1;
+			map[(int)(mousePos.y / tileSize)][(int)(mousePos.x / tileSize)] = 1;
 		}
 		else if (IsKeyDown(KEY_THREE))
 		{
-			map[(int)mousePos.y / 32][(int)mousePos.x / 32] = 2;
+			map[(int)(mousePos.y / tileSize)][(int)(mousePos.x / tileSize)] = 2;
 		}
 		else if (IsKeyDown(KEY_FOUR))
 		{
-			map[(int)mousePos.y / 32][(int)mousePos.x / 32] = 3;
+			map[(int)(mousePos.y / tileSize)][(int)(mousePos.x / tileSize)] = 3;
 		}
 	}
 	LoadMap(map);
@@ -184,8 +189,8 @@ void TileMap::DrawMap()
 		{
 			type = map[i][j];
 
-			dest.x = j * 32;	//set texture destination rect to the pos of the grid tile, multiplied by 32 for the texture pixel size
-			dest.y = i * 32;
+			dest.x = j * tileSize;	//set texture destination rect to the pos of the grid tile, multiplied by 32 for the texture pixel size
+			dest.y = i * tileSize;
 
 			switch (type)
 			{

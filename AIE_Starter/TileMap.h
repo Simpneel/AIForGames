@@ -20,10 +20,10 @@ public:
 
 	void SaveMapToFile(char saveName[15]);
 	void LoadMapFromFile(const char* fileName);
-
-
+	
 	void DrawMap();
-
+	
+	float tileSize;
 	int map[TM_ROWS][TM_COLS];
 private:
 
