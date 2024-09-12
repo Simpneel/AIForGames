@@ -53,6 +53,8 @@ public:
 
     static std::vector<AIForGames::Node*> DijkstrasSearch(AIForGames::Node* startNode, AIForGames::Node* endNode);
     static std::vector<AIForGames::Node*> AStarSearch(AIForGames::Node* startNode, AIForGames::Node* endNode);
+
+    static float EuclideanDistance(glm::vec2 pos1, glm::vec2 pos2);
 };
 
 class PathAgent
@@ -70,6 +72,8 @@ public:
 
     PathAgent() { m_position = { 0,0 }; m_currentIndex = m_speed = 0; m_currentNode = nullptr; m_path.clear(); agentTexture = LoadTexture("ref/m8ra.png"); }
     ~PathAgent() { UnloadTexture(agentTexture); }
+
+    void SetAgentTexture(Texture2D newTexture) { agentTexture = newTexture; }
 
     void Update(float deltaTime);
     void GoToNode(AIForGames::Node* node);

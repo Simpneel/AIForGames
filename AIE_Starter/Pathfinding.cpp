@@ -404,7 +404,7 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 
 std::vector<AIForGames::Node*> NodeMap::AStarSearch(AIForGames::Node* startNode, AIForGames::Node* endNode)
 {
-	return std::vector<AIForGames::Node*>();
+	//return std::vector<AIForGames::Node*>();
 
 	if (startNode == endNode) return {};
 	if (startNode == nullptr || endNode == nullptr) std::cout << "A-STAR Start or End node are nullptr, recheck code\n";
@@ -427,8 +427,20 @@ std::vector<AIForGames::Node*> NodeMap::AStarSearch(AIForGames::Node* startNode,
 		//moving current node from openList to closedList
 		openList.erase(std::remove(openList.begin(), openList.end(), currentNode), openList.end());
 		closedList.push_back(currentNode);
+		float dist = EuclideanDistance(currentNode->position, currentNode->connections.front().target->position);
+
+		if (dist <= glm::abs(startNode->position.x + endNode->position.x))
+		{
+			
+		}
+	
 	}
 
+}
+
+float NodeMap::EuclideanDistance(glm::vec2 pos1, glm::vec2 pos2)
+{
+	return glm::sqrt(glm::pow((pos1.x - pos2.x), 2) + glm::pow((pos1.y - pos2.y), 2));
 }
 
 void PathAgent::Update(float deltaTime)
@@ -521,7 +533,7 @@ void PathAgent::Draw()
 		DrawTexturePro(agentTexture,
 			Rectangle{ 0.0f, 0.0f, -(float)agentTexture.width, (float)agentTexture.height },
 			Rectangle{ m_position.x, m_position.y, (float)agentTexture.width, (float)agentTexture.height },
-			Vector2{ (float)agentTexture.width * 0.5f, (float)agentTexture.height * 0.5f },
+			Vector2{ (float)agentTexture.width * .5f, (float)agentTexture.height * .25f },
 			0.0f, WHITE);
 	}
 }

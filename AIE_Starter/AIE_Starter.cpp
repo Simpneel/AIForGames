@@ -70,11 +70,18 @@ int main(int argc, char* argv[])
     newAgent.SetNode(start);
     newAgent.SetSpeed(124);
 
+    /*PathAgent pacman;
+    pacman.SetAgentTexture(LoadTexture("ref/pacman.png"));
+    pacman.SetNode(tileNodeMap.GetClosestNode({500,500}));
+    pacman.SetSpeed(124);*/
+
     Rectangle inputBox = { screenWidth / 2, screenHeight / 2, 100, 45 };
     bool mouseOnInputBox = false;
     int letterCount = 0;
     char saveFileName[17];
+
     newAgent.GoToNode(end);
+    //pacman.GoToNode(end);
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -93,6 +100,7 @@ int main(int argc, char* argv[])
             if (end != nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end);
             newAgent.SetNode(start); //resetting the search to now consider the mouse location as the starting node when user left clicks
             newAgent.GoToNode(end);
+            
         }
         if (IsMouseButtonPressed(1))
         {
@@ -100,6 +108,7 @@ int main(int argc, char* argv[])
             if (end == nullptr) exit;
             if (start != nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the ending node when user right clicks
             newAgent.GoToNode(end);
+            
         }
         
         // Draw
@@ -143,6 +152,9 @@ int main(int argc, char* argv[])
 
         newAgent.Update(deltaTime);
         newAgent.Draw();
+
+        /*pacman.Update(deltaTime);
+        pacman.Draw();*/
         
         if (IsKeyPressed(KEY_S))     
         {
