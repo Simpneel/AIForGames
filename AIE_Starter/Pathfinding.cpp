@@ -147,6 +147,8 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 				int nodeEastCost;
 				int nodeSouthCost;
 
+				//int nodeNorthCost;
+
 				switch (node->nodeID)
 				{
 				case grassID:
@@ -207,6 +209,36 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 					nodeEast->ConnectTo(node, nodeCost);
 				}
 
+				/*Node* nodeNorth = y == (m_height - 1) ? nullptr : GetNode(x, y + 1);
+				if (nodeNorth)
+				{
+					switch (nodeNorth->nodeID)
+					{
+					case grassID:
+						nodeNorthCost = grassCost;
+						break;
+					case dirtID:
+						nodeNorthCost = dirtCost;
+						break;
+					case waterID:
+						nodeNorthCost = waterCost;
+						break;
+					default:
+						std::cout << "ERROR! Invalid node Id\n";
+						break;
+					}
+					node->ConnectTo(nodeNorth, nodeNorthCost);
+					nodeNorth->ConnectTo(node, nodeCost);
+					if (nodeWest && nodeEast)
+					{
+						nodeWest->ConnectTo(nodeNorth, nodeNorthCost);
+						nodeNorth->ConnectTo(nodeWest, nodeWestCost);
+
+						nodeEast->ConnectTo(nodeNorth, nodeNorthCost);
+						nodeNorth->ConnectTo(nodeEast, nodeEastCost);
+					}
+				}*/
+
 				Node* nodeSouth = y == 0 ? nullptr : GetNode(x, y - 1);
 				if (nodeSouth)
 				{
@@ -227,15 +259,14 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 					}
 					node->ConnectTo(nodeSouth, nodeSouthCost);
 					nodeSouth->ConnectTo(node, nodeCost);
-				}
+					if (nodeWest && nodeEast)
+					{
+						nodeWest->ConnectTo(nodeSouth, nodeSouthCost * 1.05f);
+						nodeSouth->ConnectTo(nodeWest, nodeWestCost * 1.05f);
 
-				if (nodeWest && nodeSouth && nodeEast)
-				{
-					nodeWest->ConnectTo(nodeSouth, nodeSouthCost * 1.05f);
-					nodeSouth->ConnectTo(nodeWest, nodeWestCost * 1.05f);
-
-					nodeEast->ConnectTo(nodeSouth, nodeSouthCost * 1.05f);
-					nodeSouth->ConnectTo(nodeEast, nodeEastCost * 1.05f);
+						nodeEast->ConnectTo(nodeSouth, nodeSouthCost * 1.05f);
+						nodeSouth->ConnectTo(nodeEast, nodeEastCost * 1.05f);
+					}
 				}
 			}
 		}
@@ -433,10 +464,14 @@ void PathAgent::Update(float deltaTime)
 	}*/
 	Node* nextNode = m_path.at(m_currentIndex + 1);
 
-	if (m_position.x < nextNode->position.x) m_position.x++;
-	if (m_position.x > nextNode->position.x) m_position.x--;
-	if (m_position.y < nextNode->position.y) m_position.y++;
-	if (m_position.y > nextNode->position.y) m_position.y--;
+	if (m_position.x < nextNode->position.x) { m_position.x++; if (flipAgentTexture) flipAgentTexture = false; }
+	
+	if (m_position.x > nextNode->position.x) { m_position.x--; if (!flipAgentTexture) flipAgentTexture = true; }
+	
+	if (m_position.y < nextNode->position.y) { m_position.y++; }
+	
+	if (m_position.y > nextNode->position.y) { m_position.y--; }
+	
 	if (m_position == nextNode->position) {
 		m_currentNode = nextNode;
 		m_currentIndex++;
@@ -445,7 +480,6 @@ void PathAgent::Update(float deltaTime)
 			m_position = m_path.back()->position;
 			m_path.clear();
 		}
-		
 	}
 }
 
@@ -470,6 +504,24 @@ void PathAgent::Draw()
 {
 	//DrawCircleV(Vector2(m_position.x, m_position.y), 8, ORANGE);
 	//DrawCircleLines(m_position.x, m_position.y, 9, PURPLE);
-	DrawCircleGradient(m_position.x, m_position.y, 8, SKYBLUE, DARKPURPLE);
-	DrawCircleLines(m_position.x, m_position.y, 8, RED);
+	
+	/*DrawCircleGradient(m_position.x, m_position.y, 8, SKYBLUE, DARKPURPLE);
+	DrawCircleLines(m_position.x, m_position.y, 8, RED);*/
+	
+	if (!flipAgentTexture)
+	{
+		DrawTexturePro(agentTexture,
+			Rectangle{ 0.0f, 0.0f, (float)agentTexture.width, (float)agentTexture.height },
+			Rectangle{ m_position.x, m_position.y, (float)agentTexture.width, (float)agentTexture.height },
+			Vector2{},
+			0.0f, WHITE);
+	}
+	else
+	{
+		DrawTexturePro(agentTexture,
+			Rectangle{ 0.0f, 0.0f, -(float)agentTexture.width, (float)agentTexture.height },
+			Rectangle{ m_position.x, m_position.y, (float)agentTexture.width, (float)agentTexture.height },
+			Vector2{ (float)agentTexture.width * 0.5f, (float)agentTexture.height * 0.5f },
+			0.0f, WHITE);
+	}
 }

@@ -65,7 +65,11 @@ public:
     AIForGames::Node* m_currentNode;
     float m_speed;
 
-    PathAgent() { m_position = { 0,0 }; m_currentIndex = m_speed = 0; m_currentNode = nullptr; m_path.clear(); }
+    Texture2D agentTexture;
+    bool flipAgentTexture = false;
+
+    PathAgent() { m_position = { 0,0 }; m_currentIndex = m_speed = 0; m_currentNode = nullptr; m_path.clear(); agentTexture = LoadTexture("ref/m8ra.png"); }
+    ~PathAgent() { UnloadTexture(agentTexture); }
 
     void Update(float deltaTime);
     void GoToNode(AIForGames::Node* node);
