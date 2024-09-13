@@ -4,7 +4,9 @@
 //#define RAYGUI_SUPPORT_ICONS
 #include "raygui.h"
 #include "Pathfinding.h"
-
+#include "PathAgent.h"
+#include "Agent.h"
+#include "Behaviour.h"
 #include "TileMap.h"
 #include <fstream>
 #include <iostream>
@@ -74,6 +76,8 @@ int main(int argc, char* argv[])
     pacman.SetAgentTexture(LoadTexture("ref/pacman.png"));
     pacman.SetNode(tileNodeMap.GetClosestNode({500,500}));
     pacman.SetSpeed(124);*/
+
+    Agent agent(&tileNodeMap, new GoToPointBehaviour());
 
     Rectangle inputBox = { screenWidth / 2, screenHeight / 2, 100, 45 };
     bool mouseOnInputBox = false;
