@@ -65,9 +65,6 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 	const int grassID = 0; const int dirtID = 1; const int brickID = 2; const int waterID = 3;
 	const int grassCost = 2; const int dirtCost = 1; const int waterCost = 4;
 
-	/*m_height = tileMap->mapSize * 2;
-	m_width = tileMap->mapSize * 2;*/
-
 	m_height = TM_ROWS * 2;
 	m_width = TM_COLS * 2;
 
@@ -75,12 +72,6 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 
 	for (int y = 0; y < m_height; y++)
 	{
-		//int line[COLS];
-		//for (int i = 0; i < COLS; i++) 
-		//{ 
-		//	line[i] = tileMap->map[y/2][i/2]; 
-		//}
-
 		for (int x = 0; x < m_width; x++)
 		{
 			//int tile = line[x/2];
@@ -107,33 +98,6 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 			}
 		}
 	}
-
-	/*for (int y = 0; y < m_height; y++)
-	{
-		for (int x = 0; x < m_width; x++)
-		{
-			Node* node = GetNode(x, y);
-			if (node)
-			{
-				int nodeCost = node->nodeID == 0 ? grassCost : dirtCost;
-				Node* nodeWest = x == 0 ? nullptr : GetNode(x - 1, y);
-				if (nodeWest)
-				{
-					int nodeWestCost = node->nodeID == 0 ? grassCost : dirtCost;
-					node->ConnectTo(nodeWest, nodeWestCost);
-					nodeWest->ConnectTo(node, nodeCost);
-				}
-
-				Node* nodeSouth = y == 0 ? nullptr : GetNode(x, y - 1);
-				if (nodeSouth)
-				{
-					int nodeSouthCost = node->nodeID == 0 ? grassCost : dirtCost;
-					node->ConnectTo(nodeSouth, nodeSouthCost);
-					nodeSouth->ConnectTo(node, nodeCost);
-				}
-			}
-		}
-	}*/
 
 	for (int y = 0; y < m_height; y++)
 	{
@@ -208,36 +172,6 @@ void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 					node->ConnectTo(nodeEast, nodeEastCost);
 					nodeEast->ConnectTo(node, nodeCost);
 				}
-
-				/*Node* nodeNorth = y == (m_height - 1) ? nullptr : GetNode(x, y + 1);
-				if (nodeNorth)
-				{
-					switch (nodeNorth->nodeID)
-					{
-					case grassID:
-						nodeNorthCost = grassCost;
-						break;
-					case dirtID:
-						nodeNorthCost = dirtCost;
-						break;
-					case waterID:
-						nodeNorthCost = waterCost;
-						break;
-					default:
-						std::cout << "ERROR! Invalid node Id\n";
-						break;
-					}
-					node->ConnectTo(nodeNorth, nodeNorthCost);
-					nodeNorth->ConnectTo(node, nodeCost);
-					if (nodeWest && nodeEast)
-					{
-						nodeWest->ConnectTo(nodeNorth, nodeNorthCost);
-						nodeNorth->ConnectTo(nodeWest, nodeWestCost);
-
-						nodeEast->ConnectTo(nodeNorth, nodeNorthCost);
-						nodeNorth->ConnectTo(nodeEast, nodeEastCost);
-					}
-				}*/
 
 				Node* nodeSouth = y == 0 ? nullptr : GetNode(x, y - 1);
 				if (nodeSouth)

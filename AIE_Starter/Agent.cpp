@@ -1,8 +1,14 @@
 #include "Agent.h"
-#include "Pathfinding.h"
 #include "Behaviour.h"
 
 using namespace AIForGames;
+
+Agent::Agent(NodeMap* nodeMap, Behaviour* behaviour)
+{
+	m_current = behaviour;
+	m_nodeMap = nodeMap;
+	m_color = { 255,255,0,255 };
+}
 
 void Agent::Update(float deltaTime)
 {

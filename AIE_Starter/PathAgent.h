@@ -3,6 +3,7 @@
 #include <string>
 #include <glm/glm.hpp>
 #include "TileMap.h"
+#include "Pathfinding.h"
 
 class PathAgent
 {

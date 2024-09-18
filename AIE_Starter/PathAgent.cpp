@@ -1,5 +1,4 @@
 #include "PathAgent.h"
-#include "Pathfinding.h"
 
 using namespace AIForGames;
 

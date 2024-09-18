@@ -1,5 +1,7 @@
 #pragma once
 
+class Agent;
+
 class Behaviour
 {
 public: 

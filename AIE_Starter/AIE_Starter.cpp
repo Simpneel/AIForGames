@@ -27,31 +27,6 @@ int main(int argc, char* argv[])
     float time = GetTime();
     float deltaTime;
     //--------------------------------------------------------------------------------------
-   
-    /*NodeMap nodeMap;
-    std::vector<std::string> asciiMap;
-    asciiMap.push_back("00000000000000000000");
-    asciiMap.push_back("01111111111111111110");
-    asciiMap.push_back("00000111110000001110");
-    asciiMap.push_back("01101010101010101010");
-    asciiMap.push_back("01111111111111111110");
-    asciiMap.push_back("01001000011100001100");
-    asciiMap.push_back("00001000000110000000");
-    asciiMap.push_back("00011111100111110010");
-    asciiMap.push_back("01111100000000011110");
-    asciiMap.push_back("00010111111111110010");
-    asciiMap.push_back("01110001111000000010");
-    asciiMap.push_back("01000000010000000010");
-    asciiMap.push_back("01111000111100011110");
-    asciiMap.push_back("01110000001000111010");
-    asciiMap.push_back("01110000001111100010");
-    asciiMap.push_back("01000000000000100010");
-    asciiMap.push_back("01000000000001111110");
-    asciiMap.push_back("01111111111111100000");
-    asciiMap.push_back("00000000011111100000");
-    asciiMap.push_back("00000000000000000000");
-    nodeMap.Initialise(asciiMap, 32);
-    std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);*/
 
     //TileMap initialization
     TileMap *newMap = new TileMap();
@@ -72,10 +47,6 @@ int main(int argc, char* argv[])
     newAgent.SetNode(start);
     newAgent.SetSpeed(124);
 
-    /*PathAgent pacman;
-    pacman.SetAgentTexture(LoadTexture("ref/pacman.png"));
-    pacman.SetNode(tileNodeMap.GetClosestNode({500,500}));
-    pacman.SetSpeed(124);*/
 
     Agent agent(&tileNodeMap, new GoToPointBehaviour());
 
@@ -85,7 +56,6 @@ int main(int argc, char* argv[])
     char saveFileName[17];
 
     newAgent.GoToNode(end);
-    //pacman.GoToNode(end);
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -159,9 +129,6 @@ int main(int argc, char* argv[])
         newAgent.Update(/*deltaTime*/);
         newAgent.Draw();
 
-        /*pacman.Update(deltaTime);
-        pacman.Draw();*/
-        
         if (IsKeyPressed(KEY_S))     
         {
             newMap->SaveMapToFile(saveFileName);
