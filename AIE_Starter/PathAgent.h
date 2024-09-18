@@ -24,8 +24,11 @@ public:
     void SetAgentTexture(Texture2D newTexture) { agentTexture = newTexture; }
 
     void Update(/*float deltaTime*/);
+    void Draw();
+
+    std::vector<AIForGames::Node*> GetPath() { return m_path; }
+
     void GoToNode(AIForGames::Node* node);
     void SetNode(AIForGames::Node* node);
     void SetSpeed(float speed);
-    void Draw();
 };

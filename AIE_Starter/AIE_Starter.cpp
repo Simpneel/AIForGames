@@ -49,6 +49,11 @@ int main(int argc, char* argv[])
 
 
     Agent agent(&tileNodeMap, new GoToPointBehaviour());
+    agent.SetNode(start);
+
+    Agent agent2(&tileNodeMap, new WanderBehaviour());
+    agent2.SetNode(tileNodeMap.GetRandomNode());
+    agent2.SetAgentTexture(LoadTexture("ref/m8raEvil.png"));
 
     Rectangle inputBox = { screenWidth / 2, screenHeight / 2, 100, 45 };
     bool mouseOnInputBox = false;
@@ -64,9 +69,9 @@ int main(int argc, char* argv[])
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
 
-        /*float fTime = (float)GetTime();
+        float fTime = (float)GetTime();
         deltaTime = fTime - time;
-        time = fTime;*/
+        time = fTime;
         
         //----------------------------------------------------------------------------------
         if (IsMouseButtonPressed(0))
@@ -126,8 +131,13 @@ int main(int argc, char* argv[])
             DrawCircle(end->position.x, end->position.y, 4, PINK);
         }
 
-        newAgent.Update(/*deltaTime*/);
-        newAgent.Draw();
+        //newAgent.Update(/*deltaTime*/);
+        //newAgent.Draw();
+
+        agent.Update(deltaTime);
+        agent.Draw();
+        agent2.Update(deltaTime);
+        agent2.Draw();
 
         if (IsKeyPressed(KEY_S))     
         {

@@ -17,8 +17,28 @@ void Agent::Update(float deltaTime)
 	m_pathAgent.Update();
 }
 
+void Agent::Draw()
+{
+	m_pathAgent.Draw();
+}
+
+void Agent::SetAgentTexture(Texture2D texture)
+{
+	m_pathAgent.SetAgentTexture(texture);
+}
+
 void Agent::GoTo(glm::vec2 point)
 {
 	Node* end = m_nodeMap->GetClosestNode(point);
 	m_pathAgent.GoToNode(end);
+}
+
+void Agent::SetNode(Node* node)
+{
+	m_pathAgent.SetNode(node);
+}
+
+bool Agent::PathComplete()
+{
+	return m_pathAgent.GetPath().empty();
 }

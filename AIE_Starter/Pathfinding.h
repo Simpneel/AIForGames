@@ -47,6 +47,7 @@ public:
 
     AIForGames::Node* GetNode(int x, int y) const { return m_nodes[x + m_width * y]; }
     AIForGames::Node* GetClosestNode(glm::vec2 worldPos);
+    AIForGames::Node* GetRandomNode();
 
     void Draw();
     static void DrawPath(std::vector<AIForGames::Node*> nodeMapPath, Color lineColor, float lineThickness);
