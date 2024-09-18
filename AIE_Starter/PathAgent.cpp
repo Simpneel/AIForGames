@@ -85,7 +85,7 @@ void PathAgent::Draw()
 			Rectangle{ 0.0f, 0.0f, (float)agentTexture.width, (float)agentTexture.height },
 			Rectangle{ m_position.x, m_position.y, (float)agentTexture.width, (float)agentTexture.height },
 			Vector2{ (float)agentTexture.width * .5f, (float)agentTexture.height - 16.f },
-			0.0f, WHITE);
+			0.0f, m_tint);
 	}
 	else
 	{
@@ -93,6 +93,6 @@ void PathAgent::Draw()
 			Rectangle{ 0.0f, 0.0f, -(float)agentTexture.width, (float)agentTexture.height },
 			Rectangle{ m_position.x, m_position.y, (float)agentTexture.width, (float)agentTexture.height },
 			Vector2{ (float)agentTexture.width * .5f, (float)agentTexture.height - 16.f },
-			0.0f, WHITE);
+			0.0f, m_tint);
 	}
 }

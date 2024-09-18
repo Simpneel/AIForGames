@@ -1,6 +1,5 @@
 #include "Behaviour.h"
 #include "Agent.h"
-#include <glm/glm.hpp>
 
 void GoToPointBehaviour::Update(Agent* agent, float deltaTime)
 {
@@ -13,8 +12,45 @@ void GoToPointBehaviour::Update(Agent* agent, float deltaTime)
 
 void WanderBehaviour::Update(Agent* agent, float deltaTime)
 {
-	NodeMap* nodeMap = agent->GetNodeMap();
-	Node* validNode = nodeMap->GetRandomNode();
-	agent->GoTo({ validNode->position.x, validNode->position.y });
-	if (agent->PathComplete()) validNode = nodeMap->GetRandomNode();
+	if (agent->PathComplete())
+	{
+		Node* newNode = agent->GetNodeMap()->GetRandomNode();
+		agent->GoTo({ newNode->position.x, newNode->position.y });
+	}
+}
+
+void FollowBehaviour::Update(Agent* agent, float deltaTime)
+{
+	Agent* target = agent->GetTarget();
+
+	float dist = glm::distance(target->GetPosition(), lastTargetPostion);
+	if (dist > agent->GetNodeMap()->m_cellSize)
+	{
+		lastTargetPostion = target->GetPosition();
+		agent->GoTo(lastTargetPostion);
+	}
+}
+
+void SelectorBehaviour::Update(Agent* agent, float deltaTime)
+{
+	if (glm::distance(agent->GetPosition(), agent->GetTarget()->GetPosition()) < agent->GetNodeMap()->m_cellSize * 5)
+	{
+		SetBehaviour(m_b1, agent);
+		agent->SetTint(RED);
+	}
+	else
+	{
+		SetBehaviour(m_b2, agent);
+		agent->SetTint(BLUE);
+	}
+	m_selected->Update(agent, deltaTime);
+}
+
+void SelectorBehaviour::SetBehaviour(Behaviour* b, Agent* agent)
+{
+	if (m_selected != b)
+	{
+		m_selected = b;
+		agent->Reset();
+	}
 }

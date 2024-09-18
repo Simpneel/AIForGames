@@ -22,6 +22,11 @@ void Agent::Draw()
 	m_pathAgent.Draw();
 }
 
+void Agent::SetTint(Color color)
+{
+	m_pathAgent.m_tint = color;
+}
+
 void Agent::SetAgentTexture(Texture2D texture)
 {
 	m_pathAgent.SetAgentTexture(texture);
@@ -33,6 +38,11 @@ void Agent::GoTo(glm::vec2 point)
 	m_pathAgent.GoToNode(end);
 }
 
+void Agent::GoTo(Node* node)
+{
+	m_pathAgent.GoToNode(node);
+}
+
 void Agent::SetNode(Node* node)
 {
 	m_pathAgent.SetNode(node);
@@ -41,4 +51,19 @@ void Agent::SetNode(Node* node)
 bool Agent::PathComplete()
 {
 	return m_pathAgent.GetPath().empty();
+}
+
+Agent* Agent::GetTarget()
+{
+	return target;
+}
+
+void Agent::SetTarget(Agent* agent)
+{
+	target = agent;
+}
+
+glm::vec2 Agent::GetPosition()
+{
+	return m_pathAgent.m_position;
 }

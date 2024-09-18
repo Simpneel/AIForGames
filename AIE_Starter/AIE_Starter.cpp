@@ -55,6 +55,10 @@ int main(int argc, char* argv[])
     agent2.SetNode(tileNodeMap.GetRandomNode());
     agent2.SetAgentTexture(LoadTexture("ref/m8raEvil.png"));
 
+    Agent agent3(&tileNodeMap, new SelectorBehaviour( new FollowBehaviour(), new WanderBehaviour() ));
+    agent3.SetNode(tileNodeMap.GetRandomNode());
+    agent3.SetTarget(&agent);
+
     Rectangle inputBox = { screenWidth / 2, screenHeight / 2, 100, 45 };
     bool mouseOnInputBox = false;
     int letterCount = 0;
@@ -78,8 +82,8 @@ int main(int argc, char* argv[])
         {
             start = tileNodeMap.GetClosestNode(glm::vec2(GetMousePosition().x, GetMousePosition().y));
             if (end != nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end);
-            newAgent.SetNode(start); //resetting the search to now consider the mouse location as the starting node when user left clicks
-            newAgent.GoToNode(end);
+            agent.SetNode(start); //resetting the search to now consider the mouse location as the starting node when user left clicks
+            agent.GoTo(end);
             
         }
         if (IsMouseButtonPressed(1))
@@ -87,7 +91,7 @@ int main(int argc, char* argv[])
             end = tileNodeMap.GetClosestNode(glm::vec2(GetMousePosition().x, GetMousePosition().y));
             if (end == nullptr) exit;
             if (start != nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the ending node when user right clicks
-            newAgent.GoToNode(end);
+            agent.GoTo(end);
             
         }
         
@@ -138,6 +142,8 @@ int main(int argc, char* argv[])
         agent.Draw();
         agent2.Update(deltaTime);
         agent2.Draw();
+        agent3.Update(deltaTime);
+        agent3.Draw();
 
         if (IsKeyPressed(KEY_S))     
         {

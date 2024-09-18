@@ -14,11 +14,12 @@ public:
     int m_currentIndex;
     AIForGames::Node* m_currentNode;
     float m_speed;
+    Color m_tint;
 
     Texture2D agentTexture;
     bool flipAgentTexture;
 
-    PathAgent() { m_position = { 0,0 }; m_currentIndex = m_speed = 0; m_currentNode = nullptr; m_path.clear(); agentTexture = LoadTexture("ref/m8ra.png"); flipAgentTexture = false; }
+    PathAgent() { m_position = { 0,0 }; m_currentIndex = m_speed = 0; m_currentNode = nullptr; m_path.clear(); agentTexture = LoadTexture("ref/m8ra.png"); m_tint = WHITE; flipAgentTexture = false; }
     ~PathAgent() { UnloadTexture(agentTexture); }
 
     void SetAgentTexture(Texture2D newTexture) { agentTexture = newTexture; }
