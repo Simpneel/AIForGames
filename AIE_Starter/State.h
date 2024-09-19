@@ -20,8 +20,8 @@ public:
 	~State();
 	virtual void Update(Agent* agent, float deltaTime);
 
-	virtual void Enter(Agent* agent) {}
-	virtual void Exit(Agent* agent) {}
+	virtual void Enter(Agent* agent);
+	virtual void Exit(Agent* agent);
 
 	std::vector<Transition> GetTransitions() { return m_transitions; }
 	void AddTransition(Condition* cond, State* state) { m_transitions.push_back({ cond, state }); }

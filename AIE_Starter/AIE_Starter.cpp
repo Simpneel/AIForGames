@@ -47,9 +47,9 @@ int main(int argc, char* argv[])
     Agent agent(&tileNodeMap, new GoToPointBehaviour());
     agent.SetNode(start);
 
-    Agent agent2(&tileNodeMap, new WanderBehaviour());
+    /*Agent agent2(&tileNodeMap, new WanderBehaviour());
     agent2.SetNode(tileNodeMap.GetRandomNode());
-    agent2.SetAgentTexture(LoadTexture("ref/m8raEvil.png"));
+    agent2.SetAgentTexture(LoadTexture("ref/m8raEvil.png"));*/
 
     /*Agent agent3(&tileNodeMap, new SelectorBehaviour( new FollowBehaviour(), new WanderBehaviour() ));
     agent3.SetNode(tileNodeMap.GetRandomNode());
@@ -153,8 +153,8 @@ int main(int argc, char* argv[])
 
         agent.Update(deltaTime);
         agent.Draw();
-        agent2.Update(deltaTime);
-        agent2.Draw();
+       /* agent2.Update(deltaTime);
+        agent2.Draw();*/
         agent3.Update(deltaTime);
         agent3.Draw();
 

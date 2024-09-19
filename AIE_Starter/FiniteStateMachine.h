@@ -20,5 +20,6 @@ public:
 
 	void AddState(State* newState);
 
-	virtual void Enter(Agent* agent);
+	virtual void Enter(Agent* agent) override;
+	virtual void Exit(Agent* agent) override;
 };

@@ -21,3 +21,16 @@ void State::Update(Agent* agent, float deltaTime)
 	for (Behaviour* b : m_behaviours)
 		b->Update(agent, deltaTime);
 }
+
+void State::Enter(Agent* agent)
+{
+	for (Behaviour* b : m_behaviours)
+		b->Enter(agent);
+}
+
+void State::Exit(Agent* agent)
+{
+	for (Behaviour* b : m_behaviours)
+		b->Exit(agent);
+}
+

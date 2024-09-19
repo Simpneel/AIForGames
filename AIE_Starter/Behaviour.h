@@ -8,8 +8,8 @@ class Behaviour
 public: 
 	virtual void Update(Agent* agent, float deltaTime) = 0;
 
-	virtual void Enter(Agent* agent) {}
-	virtual void Exit(Agent* agent) {}
+	virtual void Enter(Agent* agent) = 0;
+	virtual void Exit(Agent* agent) = 0;
 };
 
 //__________________________________________________________________________________________________________________________
@@ -18,6 +18,9 @@ class GoToPointBehaviour : public Behaviour
 {
 public:
 	virtual void Update(Agent* agent, float deltaTime);
+
+	virtual void Enter(Agent* agent) override;
+	virtual void Exit(Agent* agent) override;
 };
 
 //__________________________________________________________________________________________________________________________
@@ -27,8 +30,8 @@ class WanderBehaviour : public Behaviour
 public:
 	virtual void Update(Agent* agent, float deltaTime);
 
-	virtual void Enter(Agent* agent);
-	virtual void Exit(Agent* agent) {}
+	virtual void Enter(Agent* agent) override;
+	virtual void Exit(Agent* agent) override;
 };
 
 //__________________________________________________________________________________________________________________________
@@ -40,8 +43,8 @@ private:
 public:
 	virtual void Update(Agent* agent, float deltaTime);
 
-	virtual void Enter(Agent* agent);
-	virtual void Exit(Agent* agent) {}
+	virtual void Enter(Agent* agent) override;
+	virtual void Exit(Agent* agent) override;
 };
 
 //__________________________________________________________________________________________________________________________

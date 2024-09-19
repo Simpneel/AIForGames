@@ -10,6 +10,14 @@ void GoToPointBehaviour::Update(Agent* agent, float deltaTime)
 	}
 }
 
+void GoToPointBehaviour::Enter(Agent* agent)
+{
+}
+
+void GoToPointBehaviour::Exit(Agent* agent)
+{
+}
+
 void WanderBehaviour::Update(Agent* agent, float deltaTime)
 {
 	if (agent->PathComplete())
@@ -23,6 +31,11 @@ void WanderBehaviour::Enter(Agent* agent)
 {
 	agent->SetTint({ 150,245,245,255 });
 	agent->Reset();
+}
+
+void WanderBehaviour::Exit(Agent* agent)
+{
+	agent->SetTint(WHITE);
 }
 
 void FollowBehaviour::Update(Agent* agent, float deltaTime)
@@ -41,6 +54,11 @@ void FollowBehaviour::Enter(Agent* agent)
 {
 	agent->SetTint({ 255, 0, 0, 255 });
 	agent->Reset();
+}
+
+void FollowBehaviour::Exit(Agent* agent)
+{
+	agent->SetTint(WHITE);
 }
 
 void SelectorBehaviour::Update(Agent* agent, float deltaTime)

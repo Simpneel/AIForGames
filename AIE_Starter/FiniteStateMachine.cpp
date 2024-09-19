@@ -36,3 +36,8 @@ void FiniteStateMachine::Enter(Agent* agent)
 {
 	m_currentState->Enter(agent);
 }
+
+void FiniteStateMachine::Exit(Agent* agent)
+{
+	m_currentState->Exit(agent);
+}
