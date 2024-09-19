@@ -27,6 +27,8 @@ int main(int argc, char* argv[])
 
     float time = GetTime();
     float deltaTime;
+
+    Texture2D mitraEvil = LoadTexture("ref/m8raEvil.png");
     //--------------------------------------------------------------------------------------
 
     //TileMap initialization
@@ -72,6 +74,14 @@ int main(int argc, char* argv[])
     agent3.SetNode(tileNodeMap.GetRandomNode());
     agent3.SetTarget(&agent);
     
+    UtilityAI* utilAI = new UtilityAI();
+    utilAI->AddBehaviour(new WanderBehaviour());
+    utilAI->AddBehaviour(new FollowBehaviour());
+
+    Agent agent4(&tileNodeMap, utilAI);
+    agent4.SetNode(tileNodeMap.GetRandomNode());
+    agent4.SetTarget(&agent);
+    agent4.SetAgentTexture(mitraEvil);
 
     Rectangle inputBox = { screenWidth / 2, screenHeight / 2, 100, 45 };
     bool mouseOnInputBox = false;
@@ -157,6 +167,8 @@ int main(int argc, char* argv[])
         agent2.Draw();*/
         agent3.Update(deltaTime);
         agent3.Draw();
+        agent4.Update(deltaTime);
+        agent4.Draw();
 
         if (IsKeyPressed(KEY_S))     
         {

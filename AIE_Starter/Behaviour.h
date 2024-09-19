@@ -10,6 +10,8 @@ public:
 
 	virtual void Enter(Agent* agent) = 0;
 	virtual void Exit(Agent* agent) = 0;
+
+	virtual float Evaluate(Agent* agent) { return 0.0f; }
 };
 
 //__________________________________________________________________________________________________________________________
@@ -32,6 +34,8 @@ public:
 
 	virtual void Enter(Agent* agent) override;
 	virtual void Exit(Agent* agent) override;
+
+	virtual float Evaluate(Agent* agent) override;
 };
 
 //__________________________________________________________________________________________________________________________
@@ -45,6 +49,8 @@ public:
 
 	virtual void Enter(Agent* agent) override;
 	virtual void Exit(Agent* agent) override;
+
+	virtual float Evaluate(Agent* agent) override;
 };
 
 //__________________________________________________________________________________________________________________________
@@ -60,6 +66,28 @@ public:
 	virtual void Update(Agent* agent, float deltaTime);
 
 	void SetBehaviour(Behaviour* b, Agent* agent);
+};
+
+//__________________________________________________________________________________________________________________________
+
+class UtilityAI : public Behaviour
+{
+private:
+
+	Behaviour* m_currentBehaviour;
+
+	std::vector<Behaviour*> m_behaviour;
+
+public:
+	UtilityAI() { m_currentBehaviour = nullptr; }
+	~UtilityAI();
+
+	void AddBehaviour(Behaviour* b);
+
+	virtual void Enter(Agent* agent) override;
+	virtual void Exit(Agent* agent) override;
+
+	virtual void Update(Agent* agent, float deltaTime);
 };
 
 //__________________________________________________________________________________________________________________________

@@ -38,6 +38,17 @@ void WanderBehaviour::Exit(Agent* agent)
 	agent->SetTint(WHITE);
 }
 
+float WanderBehaviour::Evaluate(Agent* agent)
+{
+	Agent* target = agent->GetTarget();
+	float dist = glm::distance(target->GetPosition(), agent->GetPosition());
+
+	float eval = dist;
+	if (eval < 0) 
+		eval = 0;
+	return eval;
+}
+
 void FollowBehaviour::Update(Agent* agent, float deltaTime)
 {
 	Agent* target = agent->GetTarget();
@@ -59,6 +70,17 @@ void FollowBehaviour::Enter(Agent* agent)
 void FollowBehaviour::Exit(Agent* agent)
 {
 	agent->SetTint(WHITE);
+}
+
+float FollowBehaviour::Evaluate(Agent* agent)
+{
+	Agent* target = agent->GetTarget();
+	float dist = glm::distance(target->GetPosition(), agent->GetPosition());
+
+	float eval = 10 * agent->GetNodeMap()->m_cellSize - dist;
+	if (eval < 0)
+		eval = 0;
+	return eval;
 }
 
 void SelectorBehaviour::Update(Agent* agent, float deltaTime)
@@ -88,4 +110,49 @@ void SelectorBehaviour::SetBehaviour(Behaviour* b, Agent* agent)
 bool DistanceCondition::IsTrue(Agent* agent)
 {
 	return (glm::distance(agent->GetPosition(), agent->GetTarget()->GetPosition()) < m_distance) == m_lessThan;
+}
+
+UtilityAI::~UtilityAI()
+{
+	for (Behaviour* b : m_behaviour)
+	{
+		delete b;
+	}
+}
+
+void UtilityAI::AddBehaviour(Behaviour* b)
+{
+	m_behaviour.push_back(b);
+}
+
+void UtilityAI::Enter(Agent* agent)
+{
+}
+
+void UtilityAI::Exit(Agent* agent)
+{
+}
+
+void UtilityAI::Update(Agent* agent, float deltaTime)
+{
+	float bestEval = 0.0f;
+	Behaviour* newBehaviour = nullptr;
+	for (Behaviour* b : m_behaviour)
+	{
+		float eval = b->Evaluate(agent);
+		if (eval > bestEval)
+		{
+			bestEval = eval;
+			newBehaviour = b;
+		}
+	}
+
+	if (newBehaviour != nullptr && newBehaviour != m_currentBehaviour)
+	{
+		if (m_currentBehaviour)
+			m_currentBehaviour->Exit(agent);
+		m_currentBehaviour = newBehaviour;
+		m_currentBehaviour->Enter(agent);
+	}
+	m_currentBehaviour->Update(agent, deltaTime);
 }
