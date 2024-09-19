@@ -6,33 +6,6 @@ void PathAgent::Update(/*float deltaTime*/)
 {
 	if (m_path.empty()) return;
 
-	/*Node* nextNode = m_path.at(m_currentIndex + 1);
-
-	float distance = glm::distance(m_position, nextNode->position);
-	float distTravelled = distance - (m_speed * deltaTime);
-
-	glm::vec2 unitVec = (nextNode->position);
-
-	if (distTravelled > 0)
-	{
-		m_position = { unitVec.x * m_speed * deltaTime, unitVec.y * m_speed * deltaTime };
-	}
-	else
-	{
-		m_currentIndex++;
-		if (m_currentNode == m_path.back())
-		{
-			m_position = m_path.back()->position;
-			m_path.clear();
-			return;
-		}
-
-		if (nextNode)
-		{
-			distTravelled = -distTravelled;
-			m_position.x += unitVec.x + distTravelled; m_position.y += unitVec.y + distTravelled;
-		}
-	}*/
 	Node* nextNode = m_path.at(m_currentIndex + 1);
 
 	if (m_position.x < nextNode->position.x) { m_position.x++; if (flipAgentTexture) flipAgentTexture = false; }

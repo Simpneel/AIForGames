@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 
     InitWindow(screenWidth, screenHeight, "AI For Games: Pathfinding");
 
-    SetTargetFPS(60);
+    SetTargetFPS(120);
 
     float time = GetTime();
     float deltaTime;
