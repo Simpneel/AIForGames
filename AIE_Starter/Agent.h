@@ -25,6 +25,7 @@ public:
 	void SetNode(Node* node);
 	bool PathComplete();
 	NodeMap* GetNodeMap() { return m_nodeMap; }
+	std::vector<Node*> GetPath() { return m_pathAgent.m_path; }
 
 	Agent* GetTarget();
 	void SetTarget(Agent* agent);

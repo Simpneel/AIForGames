@@ -292,6 +292,8 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 		std::cout << "Error! Either the start node or end node for Dijkstra's Search is NULL! Line 95 Pathfinding.cpp\n";
 	}
 	if (startNode == endNode) return {};
+	
+	if (!startNode) return{};
 
 	startNode->gScore = 0;
 	startNode->previous = nullptr;

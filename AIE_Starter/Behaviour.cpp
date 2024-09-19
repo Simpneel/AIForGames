@@ -36,12 +36,12 @@ void SelectorBehaviour::Update(Agent* agent, float deltaTime)
 	if (glm::distance(agent->GetPosition(), agent->GetTarget()->GetPosition()) < agent->GetNodeMap()->m_cellSize * 5)
 	{
 		SetBehaviour(m_b1, agent);
-		agent->SetTint(RED);
+		agent->SetTint({115, 20, 25, 255});	//RED from Raylib with half the alpha
 	}
 	else
 	{
 		SetBehaviour(m_b2, agent);
-		agent->SetTint(BLUE);
+		agent->SetTint({0,60,120,255});	//BLUE from Raylib with half the alpha
 	}
 	m_selected->Update(agent, deltaTime);
 }

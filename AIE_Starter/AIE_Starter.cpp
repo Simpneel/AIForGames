@@ -37,16 +37,11 @@ int main(int argc, char* argv[])
     tileNodeMap.Initialise(newMap, 32);
 
     Node* start = tileNodeMap.GetClosestNode({2,2});
-    if (start == nullptr) start = tileNodeMap.GetClosestNode({10,10});
+    if (!start) start = tileNodeMap.GetRandomNode();
     Node* end = tileNodeMap.GetClosestNode({ 100,100 });
-    if (end == nullptr) end = tileNodeMap.GetClosestNode({ 500,500 });
+    if (!end) end = tileNodeMap.GetRandomNode();
     
     std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
-    
-    PathAgent newAgent;
-    newAgent.SetNode(start);
-    newAgent.SetSpeed(124);
-
 
     Agent agent(&tileNodeMap, new GoToPointBehaviour());
     agent.SetNode(start);
@@ -64,7 +59,7 @@ int main(int argc, char* argv[])
     int letterCount = 0;
     char saveFileName[17];
 
-    newAgent.GoToNode(end);
+    
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -127,7 +122,7 @@ int main(int argc, char* argv[])
         {
             tileNodeMap.Draw();
             tileNodeMap.DrawPath(nodeMapPath, ORANGE, 4);
-            NodeMap::DrawPath(newAgent.m_path, RED, 5);
+            tileNodeMap.DrawPath(agent.GetPath(), RED, 5);
         }
 
         if (start != nullptr && end != nullptr) {
