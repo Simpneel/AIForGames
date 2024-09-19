@@ -6,8 +6,9 @@
 #include "Pathfinding.h"
 #include "PathAgent.h"
 #include "Agent.h"
-#include "Behaviour.h"
 #include "TileMap.h"
+#include "State.h"
+#include "FiniteStateMachine.h"
 #include <fstream>
 #include <iostream>
 
@@ -50,9 +51,27 @@ int main(int argc, char* argv[])
     agent2.SetNode(tileNodeMap.GetRandomNode());
     agent2.SetAgentTexture(LoadTexture("ref/m8raEvil.png"));
 
-    Agent agent3(&tileNodeMap, new SelectorBehaviour( new FollowBehaviour(), new WanderBehaviour() ));
+    /*Agent agent3(&tileNodeMap, new SelectorBehaviour( new FollowBehaviour(), new WanderBehaviour() ));
+    agent3.SetNode(tileNodeMap.GetRandomNode());
+    agent3.SetTarget(&agent);*/
+
+    DistanceCondition* closerThan5 = new DistanceCondition(5.0f * tileNodeMap.m_cellSize, true);
+    DistanceCondition* furtherThan7 = new DistanceCondition(7.0f * tileNodeMap.m_cellSize, false);
+
+    State* WanderState = new State(new WanderBehaviour());
+    State* FollowState = new State(new FollowBehaviour());
+
+    WanderState->AddTransition(closerThan5, FollowState);
+    FollowState->AddTransition(furtherThan7, WanderState);
+
+    FiniteStateMachine* fsm = new FiniteStateMachine(WanderState);
+    fsm->AddState(WanderState);
+    fsm->AddState(FollowState);
+
+    Agent agent3(&tileNodeMap, fsm);
     agent3.SetNode(tileNodeMap.GetRandomNode());
     agent3.SetTarget(&agent);
+    
 
     Rectangle inputBox = { screenWidth / 2, screenHeight / 2, 100, 45 };
     bool mouseOnInputBox = false;
@@ -105,7 +124,6 @@ int main(int argc, char* argv[])
             {
                 isEditorOpen = false;
                 tileNodeMap.Initialise(newMap, 32);
-                nodeMapPath = NodeMap::DijkstrasSearch(start, end);
             }
             else isEditorOpen = true;
         }

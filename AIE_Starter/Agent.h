@@ -42,3 +42,4 @@ private:
 	NodeMap* m_nodeMap;
 	Color m_color;
 };
+

@@ -144,8 +144,10 @@
     <ClCompile Include="Agent.cpp" />
     <ClCompile Include="AIE_Starter.cpp" />
     <ClCompile Include="Behaviour.cpp" />
+    <ClCompile Include="FiniteStateMachine.cpp" />
     <ClCompile Include="PathAgent.cpp" />
     <ClCompile Include="Pathfinding.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -154,8 +156,10 @@
   <ItemGroup>
     <ClInclude Include="Agent.h" />
     <ClInclude Include="Behaviour.h" />
+    <ClInclude Include="FiniteStateMachine.h" />
     <ClInclude Include="PathAgent.h" />
     <ClInclude Include="Pathfinding.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="TileMap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

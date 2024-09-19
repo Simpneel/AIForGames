@@ -19,6 +19,12 @@ void WanderBehaviour::Update(Agent* agent, float deltaTime)
 	}
 }
 
+void WanderBehaviour::Enter(Agent* agent)
+{
+	agent->SetTint({ 150,245,245,255 });
+	agent->Reset();
+}
+
 void FollowBehaviour::Update(Agent* agent, float deltaTime)
 {
 	Agent* target = agent->GetTarget();
@@ -31,18 +37,24 @@ void FollowBehaviour::Update(Agent* agent, float deltaTime)
 	}
 }
 
+void FollowBehaviour::Enter(Agent* agent)
+{
+	agent->SetTint({ 255, 0, 0, 255 });
+	agent->Reset();
+}
+
 void SelectorBehaviour::Update(Agent* agent, float deltaTime)
 {
-	if (glm::distance(agent->GetPosition(), agent->GetTarget()->GetPosition()) < agent->GetNodeMap()->m_cellSize * 5)
-	{
-		SetBehaviour(m_b1, agent);
-		agent->SetTint({115, 20, 25, 255});	//RED from Raylib with half the alpha
-	}
-	else
-	{
-		SetBehaviour(m_b2, agent);
-		agent->SetTint({0,60,120,255});	//BLUE from Raylib with half the alpha
-	}
+	//if (glm::distance(agent->GetPosition(), agent->GetTarget()->GetPosition()) < agent->GetNodeMap()->m_cellSize * 5)
+	//{
+	//	SetBehaviour(m_b1, agent);
+	//	agent->SetTint(PINK);	//RED from Raylib with half the alpha
+	//}
+	//else
+	//{
+	//	SetBehaviour(m_b2, agent);
+	//	agent->SetTint(SKYBLUE);	//BLUE from Raylib with half the alpha
+	//}
 	m_selected->Update(agent, deltaTime);
 }
 
@@ -53,4 +65,9 @@ void SelectorBehaviour::SetBehaviour(Behaviour* b, Agent* agent)
 		m_selected = b;
 		agent->Reset();
 	}
+}
+
+bool DistanceCondition::IsTrue(Agent* agent)
+{
+	return (glm::distance(agent->GetPosition(), agent->GetTarget()->GetPosition()) < m_distance) == m_lessThan;
 }

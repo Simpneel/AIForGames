@@ -16,7 +16,7 @@ namespace AIForGames
         Edge() { target = nullptr; cost = 0; }
         Edge(Node* _target, float _cost) : target(_target), cost(_cost) {}
     };
-
+    //______________________________________________________________________
     struct Node {
 
         glm::vec2 position;
@@ -33,6 +33,8 @@ namespace AIForGames
         void ConnectTo(Node* other, float cost) { connections.push_back(Edge(other, cost)); }
     };
 }
+
+//__________________________________________________________________________________________________________________________
 
 class NodeMap
 {
@@ -57,3 +59,5 @@ public:
 
     static float EuclideanDistance(glm::vec2 pos1, glm::vec2 pos2);
 };
+
+//__________________________________________________________________________________________________________________________
