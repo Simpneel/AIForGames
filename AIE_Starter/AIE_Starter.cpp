@@ -23,11 +23,12 @@ int main(int argc, char* argv[])
 
     InitWindow(screenWidth, screenHeight, "AI For Games: Pathfinding");
 
-    SetTargetFPS(120);
+    SetTargetFPS(60);
 
     float time = GetTime();
     float deltaTime;
 
+    Texture2D mitra = LoadTexture("ref/m9ra.png");
     Texture2D mitraEvil = LoadTexture("ref/m8raEvil.png");
     //--------------------------------------------------------------------------------------
 
@@ -187,6 +188,10 @@ int main(int argc, char* argv[])
     }
     // De-Initialization
     //--------------------------------------------------------------------------------------   
+
+    UnloadTexture(mitra);
+    UnloadTexture(mitraEvil);
+
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
