@@ -58,6 +58,10 @@ public:
 
 class AttackBehaviour : public Behaviour
 {
+private:
+	float attackTimer = 1.0f;
+	glm::vec2 lastTargetPosition;
+public:
 	virtual void Update(Agent* agent, float deltaTime);
 	
 	virtual void Enter(Agent* agent) override;

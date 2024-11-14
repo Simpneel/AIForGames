@@ -11,6 +11,7 @@
 #include "FiniteStateMachine.h"
 #include <fstream>
 #include <iostream>
+#include <string>
 
 using namespace AIForGames;
 
@@ -63,6 +64,7 @@ int main(int argc, char* argv[])
 
     State* WanderState = new State(new WanderBehaviour());
     State* FollowState = new State(new FollowBehaviour());
+    State* AttackState = new State(new AttackBehaviour());
 
     WanderState->AddTransition(closerThan5, FollowState);
     FollowState->AddTransition(furtherThan7, WanderState);
@@ -71,25 +73,30 @@ int main(int argc, char* argv[])
     fsm->AddState(WanderState);
     fsm->AddState(FollowState);
 
-    Agent agent3(&tileNodeMap, fsm);
-    agent3.SetNode(tileNodeMap.GetRandomNode());
-    agent3.SetTarget(&agent);
-    
-    UtilityAI* utilAI = new UtilityAI();
-    utilAI->AddBehaviour(new WanderBehaviour());
-    utilAI->AddBehaviour(new FollowBehaviour());
+    UtilityAI* utilAI1 = new UtilityAI();
+    utilAI1->AddBehaviour(new WanderBehaviour());
+    utilAI1->AddBehaviour(new FollowBehaviour());
+    utilAI1->AddBehaviour(new AttackBehaviour());
+    UtilityAI* utilAI2 = new UtilityAI();
+    utilAI2->AddBehaviour(new WanderBehaviour());
+    utilAI2->AddBehaviour(new FollowBehaviour());
+    utilAI2->AddBehaviour(new AttackBehaviour());
 
-    Agent agent4(&tileNodeMap, utilAI);
-    agent4.SetNode(tileNodeMap.GetRandomNode());
-    agent4.SetTarget(&agent);
-    agent4.SetAgentTexture(mitraEvil);
+    Agent enemy1(&tileNodeMap, utilAI1);
+    enemy1.SetNode(tileNodeMap.GetRandomNode());
+    enemy1.SetTarget(&agent);
+
+    Agent enemy2(&tileNodeMap, utilAI2);
+    enemy2.SetNode(tileNodeMap.GetRandomNode());
+    enemy2.SetTarget(&agent);
+    enemy2.SetAgentTexture(mitraEvil);
 
     Rectangle inputBox = { screenWidth / 2, screenHeight / 2, 100, 45 };
     bool mouseOnInputBox = false;
     int letterCount = 0;
     char saveFileName[17];
 
-    
+    std::string agentHP;
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -101,6 +108,7 @@ int main(int argc, char* argv[])
         float fTime = (float)GetTime();
         deltaTime = fTime - time;
         time = fTime;
+        agentHP = std::to_string(agent.GetHealth());
         
         //----------------------------------------------------------------------------------
         if (IsMouseButtonPressed(0))
@@ -126,6 +134,7 @@ int main(int argc, char* argv[])
 
         ClearBackground(DARKGRAY);
         DrawFPS(screenWidth - 50, screenHeight - 25);
+        DrawText(agentHP.c_str(), screenWidth - 50, screenHeight - 50, 3, WHITE);
 
         DrawText("N - NodeMap View", 650, 580, 5, {15, 225, 255, 255});
 
@@ -166,10 +175,10 @@ int main(int argc, char* argv[])
         agent.Draw();
        /* agent2.Update(deltaTime);
         agent2.Draw();*/
-        agent3.Update(deltaTime);
-        agent3.Draw();
-        agent4.Update(deltaTime);
-        agent4.Draw();
+        enemy1.Update(deltaTime);
+        enemy1.Draw();
+        enemy2.Update(deltaTime);
+        enemy2.Draw();
 
         if (IsKeyPressed(KEY_S))     
         {

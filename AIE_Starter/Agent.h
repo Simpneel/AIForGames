@@ -34,9 +34,13 @@ public:
 
 	void Reset() { m_pathAgent.m_path.clear(); }
 
+	void SetHealth(int newHealth) { m_health = newHealth; if (newHealth < m_health) SetTint(RED); }
+	int GetHealth() { return m_health; }
+
 private:
 	Agent* target;
 
+	int m_health;
 	PathAgent m_pathAgent;
 	Behaviour *m_current;
 	NodeMap* m_nodeMap;

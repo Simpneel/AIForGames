@@ -62,8 +62,16 @@ void FollowBehaviour::Update(Agent* agent, float deltaTime)
 	float dist = glm::distance(target->GetPosition(), lastTargetPostion);
 	if (dist > agent->GetNodeMap()->m_cellSize * 5)
 	{
-		lastTargetPostion = target->GetPosition();
-		glm::vec2 goToPoint;
+		glm::vec2 stoppingPoint;
+		if (agent->GetPosition().x < target->GetPosition().x) {
+			if (agent->GetPosition().y < target->GetPosition().y) stoppingPoint = { -25,-25 };
+			else stoppingPoint = { -25,25 };
+		}
+		else {
+			if (agent->GetPosition().y < target->GetPosition().y) stoppingPoint = { 25,-25 };
+			else stoppingPoint = { 25,25 };
+		}
+		lastTargetPostion = target->GetPosition() + stoppingPoint;
 		agent->GoTo(lastTargetPostion);
 	}
 }
@@ -84,7 +92,7 @@ float FollowBehaviour::Evaluate(Agent* agent)
 	Agent* target = agent->GetTarget();
 	float dist = glm::distance(target->GetPosition(), agent->GetPosition());
 
-	float eval = 20 * agent->GetNodeMap()->m_cellSize - dist;
+	float eval = 15 * agent->GetNodeMap()->m_cellSize - dist;
 	if (eval < 0)
 		eval = 0;
 	return eval;
@@ -95,7 +103,45 @@ float FollowBehaviour::Evaluate(Agent* agent)
 void AttackBehaviour::Update(Agent* agent, float deltaTime)
 {
 	Agent* target = agent->GetTarget();
+	
+	float dist = glm::distance(agent->GetPosition(), target->GetPosition());
 
+	if (dist > agent->GetNodeMap()->m_cellSize * 5) {
+		lastTargetPosition = target->GetPosition();
+		agent->GoTo(lastTargetPosition);
+	}
+	else {
+		attackTimer -= deltaTime;
+		if (attackTimer <= 0) {
+			attackTimer = 1.0f;
+			target->SetHealth(target->GetHealth() - 5);
+		}
+	}
+}
+
+void AttackBehaviour::Enter(Agent* agent)
+{
+	agent->SetTint(RED);
+	agent->Reset();
+}
+
+void AttackBehaviour::Exit(Agent* agent)
+{
+	agent->SetTint(WHITE);
+}
+
+float AttackBehaviour::Evaluate(Agent* agent)
+{
+	Agent* target = agent->GetTarget();
+
+	float dist = glm::distance(target->GetPosition(), agent->GetPosition());
+
+	float eval = 16 * agent->GetNodeMap()->m_cellSize - dist;
+
+	if (eval < 0) {
+		eval = 0;
+	}
+	return eval;
 }
 
 //__________________________________________________________________________________________________________________________
