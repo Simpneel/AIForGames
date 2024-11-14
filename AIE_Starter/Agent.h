@@ -12,7 +12,7 @@ class Agent
 public:
 	Agent() {}
 	Agent(NodeMap* nodeMap, Behaviour* behaviour);
-	~Agent() { delete m_current;}
+	~Agent() { delete m_current; }
 
 	void Update(float deltaTime);
 	void Draw();

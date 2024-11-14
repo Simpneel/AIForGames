@@ -56,6 +56,30 @@ public:
 
 //__________________________________________________________________________________________________________________________
 
+class AttackBehaviour : public Behaviour
+{
+	virtual void Update(Agent* agent, float deltaTime);
+	
+	virtual void Enter(Agent* agent) override;
+	virtual void Exit(Agent* agent) override;
+
+	virtual float Evaluate(Agent* agent) override;
+};
+
+//__________________________________________________________________________________________________________________________
+
+class EscapeBehaviour : public Behaviour
+{
+	virtual void Update(Agent* agent, float deltaTime);
+
+	virtual void Enter(Agent* agent) override;
+	virtual void Exit(Agent* agent) override;
+
+	virtual float Evaluate(Agent* agent) override;
+};
+
+//__________________________________________________________________________________________________________________________
+
 class SelectorBehaviour : public Behaviour
 {
 private:
@@ -93,8 +117,6 @@ public:
 
 //__________________________________________________________________________________________________________________________
 		//Condition classes
-//__________________________________________________________________________________________________________________________
-
 class Condition
 {
 public:

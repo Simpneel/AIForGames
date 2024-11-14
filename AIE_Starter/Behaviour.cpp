@@ -18,6 +18,9 @@ void GoToPointBehaviour::Exit(Agent* agent)
 {
 }
 
+//__________________________________________________________________________________________________________________________
+//	Wander Behaviour
+
 void WanderBehaviour::Update(Agent* agent, float deltaTime)
 {
 	if (agent->PathComplete())
@@ -29,7 +32,7 @@ void WanderBehaviour::Update(Agent* agent, float deltaTime)
 
 void WanderBehaviour::Enter(Agent* agent)
 {
-	agent->SetTint({ 150,245,245,255 });
+	agent->SetTint(LIME);
 	agent->Reset();
 }
 
@@ -49,21 +52,25 @@ float WanderBehaviour::Evaluate(Agent* agent)
 	return eval;
 }
 
+//__________________________________________________________________________________________________________________________
+//	Follow Behaviour
+
 void FollowBehaviour::Update(Agent* agent, float deltaTime)
 {
 	Agent* target = agent->GetTarget();
 
 	float dist = glm::distance(target->GetPosition(), lastTargetPostion);
-	if (dist > agent->GetNodeMap()->m_cellSize)
+	if (dist > agent->GetNodeMap()->m_cellSize * 5)
 	{
 		lastTargetPostion = target->GetPosition();
+		glm::vec2 goToPoint;
 		agent->GoTo(lastTargetPostion);
 	}
 }
 
 void FollowBehaviour::Enter(Agent* agent)
 {
-	agent->SetTint({ 255, 0, 0, 255 });
+	agent->SetTint(ORANGE);
 	agent->Reset();
 }
 
@@ -77,24 +84,24 @@ float FollowBehaviour::Evaluate(Agent* agent)
 	Agent* target = agent->GetTarget();
 	float dist = glm::distance(target->GetPosition(), agent->GetPosition());
 
-	float eval = 10 * agent->GetNodeMap()->m_cellSize - dist;
+	float eval = 20 * agent->GetNodeMap()->m_cellSize - dist;
 	if (eval < 0)
 		eval = 0;
 	return eval;
 }
 
+//__________________________________________________________________________________________________________________________
+
+void AttackBehaviour::Update(Agent* agent, float deltaTime)
+{
+	Agent* target = agent->GetTarget();
+
+}
+
+//__________________________________________________________________________________________________________________________
+
 void SelectorBehaviour::Update(Agent* agent, float deltaTime)
 {
-	//if (glm::distance(agent->GetPosition(), agent->GetTarget()->GetPosition()) < agent->GetNodeMap()->m_cellSize * 5)
-	//{
-	//	SetBehaviour(m_b1, agent);
-	//	agent->SetTint(PINK);	//RED from Raylib with half the alpha
-	//}
-	//else
-	//{
-	//	SetBehaviour(m_b2, agent);
-	//	agent->SetTint(SKYBLUE);	//BLUE from Raylib with half the alpha
-	//}
 	m_selected->Update(agent, deltaTime);
 }
 
@@ -107,10 +114,7 @@ void SelectorBehaviour::SetBehaviour(Behaviour* b, Agent* agent)
 	}
 }
 
-bool DistanceCondition::IsTrue(Agent* agent)
-{
-	return (glm::distance(agent->GetPosition(), agent->GetTarget()->GetPosition()) < m_distance) == m_lessThan;
-}
+//__________________________________________________________________________________________________________________________
 
 UtilityAI::~UtilityAI()
 {
@@ -156,3 +160,11 @@ void UtilityAI::Update(Agent* agent, float deltaTime)
 	}
 	m_currentBehaviour->Update(agent, deltaTime);
 }
+
+//__________________________________________________________________________________________________________________________
+
+bool DistanceCondition::IsTrue(Agent* agent)
+{
+	return (glm::distance(agent->GetPosition(), agent->GetTarget()->GetPosition()) < m_distance) == m_lessThan;
+}
+
