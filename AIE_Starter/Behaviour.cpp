@@ -112,7 +112,7 @@ void AttackBehaviour::Update(Agent* agent, float deltaTime)
 	}
 	else {
 		attackTimer -= deltaTime;
-		if (attackTimer <= 0) {
+		if (attackTimer <= 0 && dist <= agent->GetNodeMap()->m_cellSize) {
 			attackTimer = 1.0f;
 			target->SetHealth(target->GetHealth() - 5);
 		}
