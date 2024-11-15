@@ -58,6 +58,11 @@ using namespace AIForGames;
 //	}
 //}
 
+NodeMap::~NodeMap() 
+{
+	
+}
+
 void NodeMap::Initialise(TileMap* tileMap, int tileSize)
 {
 	m_cellSize = tileSize / 2;

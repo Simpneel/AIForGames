@@ -10,6 +10,7 @@ Agent::Agent(NodeMap* nodeMap, Behaviour* behaviour)
 	m_color = { 255,255,255,255 };
 	m_current->Enter(this);
 	m_health = 100;
+	target = nullptr;
 }
 
 void Agent::Update(float deltaTime)

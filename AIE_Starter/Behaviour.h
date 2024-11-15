@@ -139,4 +139,14 @@ public:
 	virtual bool IsTrue(Agent* agent);
 };
 
+class HealthCondition : public Condition
+{
+private:
+	float hp1;
+	float hp2;
+	bool lessThan;
+public:
+	HealthCondition(float hp1, float hp2, bool less) : hp1(hp1), hp2(hp2), lessThan(less) {}
+	virtual bool IsTrue(Agent* agent);
+};
 //__________________________________________________________________________________________________________________________

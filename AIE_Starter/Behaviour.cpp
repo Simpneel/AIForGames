@@ -138,7 +138,8 @@ float AttackBehaviour::Evaluate(Agent* agent)
 
 	float eval = 0;
 
-	if (agent->GetHealth() > target->GetHealth()) 
+	float hpDiff = agent->GetHealth() - target->GetHealth();
+	eval = dist + hpDiff;
 	
 	if (eval < 0)
 		eval = 0;
@@ -216,3 +217,7 @@ bool DistanceCondition::IsTrue(Agent* agent)
 	return (glm::distance(agent->GetPosition(), agent->GetTarget()->GetPosition()) < m_distance) == m_lessThan;
 }
 
+bool HealthCondition::IsTrue(Agent* agent)
+{
+	return (agent->GetHealth() > agent->GetTarget()->GetHealth()) == lessThan;
+}

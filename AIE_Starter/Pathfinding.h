@@ -42,6 +42,8 @@ public:
     int m_width, m_height;
     float m_cellSize;
 
+    ~NodeMap();
+
     AIForGames::Node** m_nodes;
     void Initialise(std::vector<std::string> asciiMap, int cellSize);
 
