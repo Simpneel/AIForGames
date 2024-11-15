@@ -134,7 +134,7 @@ int main(int argc, char* argv[])
 
         ClearBackground(DARKGRAY);
         DrawFPS(screenWidth - 50, screenHeight - 25);
-        DrawText(agentHP.c_str(), screenWidth - 50, screenHeight - 50, 3, WHITE);
+        DrawText(agentHP.c_str(), screenWidth - 50, screenHeight - 50, 6, WHITE);
 
         DrawText("N - NodeMap View", 650, 580, 5, {15, 225, 255, 255});
 

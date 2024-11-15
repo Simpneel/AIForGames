@@ -35,7 +35,7 @@ void PathAgent::GoToNode(AIForGames::Node* node)
 
 void PathAgent::SetNode(AIForGames::Node* node)
 {
-	m_currentNode = node;
+	if (node) m_currentNode = node;
 	m_position = node->position;
 }
 

@@ -60,7 +60,7 @@ void FollowBehaviour::Update(Agent* agent, float deltaTime)
 	Agent* target = agent->GetTarget();
 
 	float dist = glm::distance(target->GetPosition(), lastTargetPostion);
-	if (dist > agent->GetNodeMap()->m_cellSize * 5)
+	if (dist > agent->GetNodeMap()->m_cellSize * 10)
 	{
 		glm::vec2 stoppingPoint;
 		if (agent->GetPosition().x < target->GetPosition().x) {
@@ -92,7 +92,7 @@ float FollowBehaviour::Evaluate(Agent* agent)
 	Agent* target = agent->GetTarget();
 	float dist = glm::distance(target->GetPosition(), agent->GetPosition());
 
-	float eval = 15 * agent->GetNodeMap()->m_cellSize - dist;
+	float eval = 10 * agent->GetNodeMap()->m_cellSize - dist;
 	if (eval < 0)
 		eval = 0;
 	return eval;
@@ -136,11 +136,13 @@ float AttackBehaviour::Evaluate(Agent* agent)
 
 	float dist = glm::distance(target->GetPosition(), agent->GetPosition());
 
-	float eval = 16 * agent->GetNodeMap()->m_cellSize - dist;
+	float eval = 0;
 
-	if (eval < 0) {
+	if (agent->GetHealth() > target->GetHealth()) 
+	
+	if (eval < 0)
 		eval = 0;
-	}
+
 	return eval;
 }
 
