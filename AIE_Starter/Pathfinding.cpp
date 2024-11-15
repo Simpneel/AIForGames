@@ -60,7 +60,7 @@ using namespace AIForGames;
 
 NodeMap::~NodeMap() 
 {
-	
+	delete m_nodes;
 }
 
 void NodeMap::Initialise(TileMap* tileMap, int tileSize)
