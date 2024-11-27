@@ -351,7 +351,7 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 {
 	if (startNode == nullptr || endNode == nullptr)
 	{
-		std::cout << "Error! Either the start node or end node for Dijkstra's Search is NULL! Line 95 Pathfinding.cpp\n";
+		std::cout << "Error! Either the start node or end node for Dijkstra's Search is NULL! Line 354 Pathfinding.cpp\n";
 	}
 	if (startNode == endNode) return {};
 
@@ -412,33 +412,71 @@ std::vector<AIForGames::Node*> NodeMap::DijkstrasSearch(AIForGames::Node* startN
 	}
 }
 
+float AStarHeuristic(Node* current, Node* goal) {
+	float val = std::abs(current->position.x - goal->position.x) + std::abs(current->position.y - goal->position.y);
+	return val;
+}
+
+bool compareFScore(Node* n1, Node* n2, Node* goal) {
+	bool val = (n1->gScore + AStarHeuristic(n1, goal)) < (n2->gScore + AStarHeuristic(n2, goal));
+	//std::cout << val << "\tFScore check\n\n";
+	return val;
+}
+
 std::vector<AIForGames::Node*> NodeMap::AStarSearch(AIForGames::Node* startNode, AIForGames::Node* endNode)
 {
-	//return std::vector<AIForGames::Node*>();
-
+	if (!startNode || !endNode) {
+		std::cout << "Error! Either the start node or end node for AStar Search is NULL! Line 428 Pathfinding.cpp\n";
+		return {};
+	}
 	if (startNode == endNode) return {};
-	if (startNode == nullptr || endNode == nullptr) std::cout << "A-STAR Start or End node are nullptr, recheck code\n";
 
-	startNode->previous = nullptr;
 	startNode->gScore = 0;
+	startNode->previous = nullptr;
 
-	std::vector<Node*> openList, closedList;
-	
-	openList.insert(openList.begin(), startNode);
-	while (!openList.empty())
-	{
-		//sorting the open list using G Scores via a custom compare function [compareGScore]
-		std::sort(openList.begin(), openList.end(), compareGScore);
+	std::vector<Node*> openList = { startNode };
+	std::vector<Node*> closedList;
+
+	while (!openList.empty()) {
+		std::sort(openList.begin(), openList.end(), [&](Node* n1, Node* n2) {
+			return compareFScore(n1, n2, endNode);
+			});
+
 		Node* currentNode = openList.front();
-
-		//checking if the search has reached the final node of the search i.e. the end node
 		if (currentNode == endNode) break;
 
-		//moving current node from openList to closedList
-		openList.erase(std::remove(openList.begin(), openList.end(), currentNode), openList.end());
+		openList.erase(openList.begin());
 		closedList.push_back(currentNode);
-		float dist = EuclideanDistance(currentNode->position, currentNode->connections.front().target->position);
-		
+
+		for (auto& c : currentNode->connections) {
+			Node* neighbour = c.target;
+			if (std::find(closedList.begin(), closedList.end(), neighbour) != closedList.end()) {
+				continue;
+			}
+
+			float gScore = currentNode->gScore + c.cost;
+			if (gScore < neighbour->gScore) {
+				neighbour->gScore = gScore;
+				neighbour->previous = currentNode;
+
+				if (std::find(openList.begin(), openList.end(), neighbour) == openList.end()) {
+					openList.push_back(neighbour);
+				}
+			}
+		}
+	}
+
+	if (openList.empty()) return {};
+	else {
+		std::vector<Node*> Path;
+		Node* currentNode = endNode;
+
+		while (currentNode != nullptr)
+		{
+			Path.insert(Path.begin(), currentNode);
+			currentNode = currentNode->previous;
+		}
+		return Path;
 	}
 }
 
