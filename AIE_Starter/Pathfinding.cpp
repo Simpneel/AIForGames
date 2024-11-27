@@ -485,6 +485,15 @@ float NodeMap::EuclideanDistance(glm::vec2 pos1, glm::vec2 pos2)
 	return glm::sqrt(glm::pow((pos1.x - pos2.x), 2) + glm::pow((pos1.y - pos2.y), 2));
 }
 
+PathAgent::~PathAgent()
+{
+	UnloadTexture(agentTexture); 
+	for (Node* node : m_path) { 
+		delete node; 
+	} 
+	m_path.clear();
+}
+
 void PathAgent::Update(/*float deltaTime*/)
 {
 	if (m_path.empty()) return;
