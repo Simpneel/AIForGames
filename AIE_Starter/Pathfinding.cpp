@@ -5,6 +5,14 @@
 
 using namespace AIForGames;
 
+NodeMap::~NodeMap()
+{
+	for (int i = 0; i < m_width * m_height; i++) {
+		delete m_nodes[i];
+	}
+	delete[] m_nodes;
+}
+
 void NodeMap::Initialise(std::vector<std::string> asciiMap, int cellSize)
 {
 	m_cellSize = cellSize;
@@ -442,34 +450,7 @@ float NodeMap::EuclideanDistance(glm::vec2 pos1, glm::vec2 pos2)
 void PathAgent::Update(/*float deltaTime*/)
 {
 	if (m_path.empty()) return;
-	
-	/*Node* nextNode = m_path.at(m_currentIndex + 1);
 
-	float distance = glm::distance(m_position, nextNode->position);
-	float distTravelled = distance - (m_speed * deltaTime);
-	
-	glm::vec2 unitVec = (nextNode->position);
-
-	if (distTravelled > 0)
-	{
-		m_position = { unitVec.x * m_speed * deltaTime, unitVec.y * m_speed * deltaTime };
-	}
-	else
-	{
-		m_currentIndex++;
-		if (m_currentNode == m_path.back())
-		{
-			m_position = m_path.back()->position;
-			m_path.clear();
-			return;
-		}
-
-		if (nextNode)
-		{
-			distTravelled = -distTravelled;
-			m_position.x += unitVec.x + distTravelled; m_position.y += unitVec.y + distTravelled;
-		}
-	}*/
 	Node* nextNode = m_path.at(m_currentIndex + 1);
 
 	if (m_position.x < nextNode->position.x) { m_position.x++; if (flipAgentTexture) flipAgentTexture = false; }
@@ -510,12 +491,6 @@ void PathAgent::SetSpeed(float speed)
 
 void PathAgent::Draw()
 {
-	//DrawCircleV(Vector2(m_position.x, m_position.y), 8, ORANGE);
-	//DrawCircleLines(m_position.x, m_position.y, 9, PURPLE);
-	
-	/*DrawCircleGradient(m_position.x, m_position.y, 8, SKYBLUE, DARKPURPLE);
-	DrawCircleLines(m_position.x, m_position.y, 8, RED);*/
-	
 	if (!flipAgentTexture)
 	{
 		DrawTexturePro(agentTexture,

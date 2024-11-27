@@ -27,6 +27,7 @@ namespace AIForGames
 
         Node() { gScore = 0; previous = nullptr; }
         Node(float x, float y) { position.x = x; position.y = y; gScore = 0; previous = nullptr; }
+        ~Node() { for (Edge& conn : connections) { delete conn.target; } }
 
         void SetPosition(float x, float y) { position.x = x; position.y = y; }
 
@@ -41,6 +42,8 @@ public:
     float m_cellSize;
 
     AIForGames::Node** m_nodes;
+    NodeMap() {}
+    ~NodeMap();
     void Initialise(std::vector<std::string> asciiMap, int cellSize);
 
     void Initialise(TileMap* tileMap, int cellSize);
@@ -71,7 +74,7 @@ public:
     bool flipAgentTexture;
 
     PathAgent() { m_position = { 0,0 }; m_currentIndex = m_speed = 0; m_currentNode = nullptr; m_path.clear(); agentTexture = LoadTexture("ref/m8ra.png"); flipAgentTexture = false; }
-    ~PathAgent() { UnloadTexture(agentTexture); }
+    ~PathAgent() { UnloadTexture(agentTexture); for (Node* node : m_path) { delete node; } m_path.clear(); }
 
     void SetAgentTexture(Texture2D newTexture) { agentTexture = newTexture; }
 
