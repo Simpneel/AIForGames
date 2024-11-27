@@ -25,8 +25,8 @@ namespace AIForGames
         Node* previous;
         int nodeID;
 
-        Node() { gScore = 0; previous = nullptr; }
-        Node(float x, float y) { position.x = x; position.y = y; gScore = 0; previous = nullptr; }
+        Node() { gScore = 0; previous = nullptr; position = { 0,0 }; nodeID = 0; }
+        Node(float x, float y) { position.x = x; position.y = y; gScore = 0; nodeID = 0; previous = nullptr; }
         ~Node() { for (Edge& conn : connections) { delete conn.target; } }
 
         void SetPosition(float x, float y) { position.x = x; position.y = y; }
