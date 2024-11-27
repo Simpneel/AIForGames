@@ -488,9 +488,6 @@ float NodeMap::EuclideanDistance(glm::vec2 pos1, glm::vec2 pos2)
 PathAgent::~PathAgent()
 {
 	UnloadTexture(agentTexture); 
-	for (Node* node : m_path) { 
-		delete node; 
-	} 
 	m_path.clear();
 }
 
