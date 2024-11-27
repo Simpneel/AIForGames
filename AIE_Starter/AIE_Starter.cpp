@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
     Node* end = tileNodeMap.GetClosestNode({ 100,100 });
     if (end == nullptr) end = tileNodeMap.GetClosestNode({ 500,500 });
     
-    std::vector<Node*> nodeMapPath = NodeMap::DijkstrasSearch(start, end);
+    std::vector<Node*> nodeMapPath = NodeMap::AStarSearch(start, end);
     
     PathAgent newAgent;
     newAgent.SetNode(start);
@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
         if (IsMouseButtonPressed(0))
         {
             start = tileNodeMap.GetClosestNode(glm::vec2(GetMousePosition().x, GetMousePosition().y));
-            if (end != nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end);
+            if (end != nullptr) nodeMapPath = NodeMap::AStarSearch(start, end);
             newAgent.SetNode(start); //resetting the search to now consider the mouse location as the starting node when user left clicks
             newAgent.GoToNode(end);
             
@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
         {
             end = tileNodeMap.GetClosestNode(glm::vec2(GetMousePosition().x, GetMousePosition().y));
             if (end == nullptr) exit;
-            if (start != nullptr) nodeMapPath = NodeMap::DijkstrasSearch(start, end); //resetting the search to now consider the mouse location as the ending node when user right clicks
+            if (start != nullptr) nodeMapPath = NodeMap::AStarSearch(start, end); //resetting the search to now consider the mouse location as the ending node when user right clicks
             newAgent.GoToNode(end);
             
         }
@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
             {
                 isEditorOpen = false;
                 tileNodeMap.Initialise(newMap, 32);
-                nodeMapPath = NodeMap::DijkstrasSearch(start, end);
+                nodeMapPath = NodeMap::AStarSearch(start, end);
             }
             else isEditorOpen = true;
         }
