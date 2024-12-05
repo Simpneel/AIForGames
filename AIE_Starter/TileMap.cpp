@@ -64,10 +64,10 @@ TileMap::TileMap()
 
 TileMap::~TileMap()
 {
-	UnloadTexture(grassTexture);
-	UnloadTexture(waterTexture);
-	UnloadTexture(brickTexture);
-	UnloadTexture(dirtTexture);
+	if (grassTexture.id) UnloadTexture(grassTexture);
+	if (waterTexture.id) UnloadTexture(waterTexture);
+	if (brickTexture.id) UnloadTexture(brickTexture);
+	if (dirtTexture.id) UnloadTexture(dirtTexture);
 }
 
 void TileMap::LoadMap(int arr[TM_ROWS][TM_COLS])

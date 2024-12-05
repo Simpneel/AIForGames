@@ -98,6 +98,7 @@ int main(int argc, char* argv[])
         if (IsMouseButtonPressed(0))
         {
             start = tileNodeMap.GetClosestNode(glm::vec2(GetMousePosition().x, GetMousePosition().y));
+            if (start == nullptr) exit;
             if (end != nullptr) nodeMapPath = NodeMap::AStarSearch(start, end);
             newAgent.SetNode(start); //resetting the search to now consider the mouse location as the starting node when user left clicks
             newAgent.GoToNode(end);
@@ -173,10 +174,12 @@ int main(int argc, char* argv[])
         
         //----------------------------------------------------------------------------------
     }
+    
     // De-Initialization
     //--------------------------------------------------------------------------------------   
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
+    delete newMap;
 
     return 0;
 }
